@@ -13,11 +13,16 @@ export const useUserStore = create((set) => ({
 
     try {
 
-      const res = await axios.post('http://localhost:5000/api/auth', newUser);
+      const res = await axios.post('http://localhost:5001/api/auth', newUser);
 
       const data = res.data;
-      
-      return { success: true, message: 'User created successfully', data: data.data, login: res.data.login };
+      console.log(data);
+
+      if (data.data) {
+        return { success: data.success, message: 'User created successfully', data: data.data };
+      } else {
+        return { success: data.success, message: data.message, status: data.status };
+      }
 
     } catch (err) {
 
@@ -29,12 +34,18 @@ export const useUserStore = create((set) => ({
   },
   createUser: async (newUser) => {
     try {
-
-      const res = await axios.post('http://localhost:5000/api/users', newUser);
+     
+      const res = await axios.post('http://localhost:5001/api/users', newUser);
 
       const data = res.data;
 
-      return { success: true, message: 'User created successfully', data: data.user };
+      console.log(res);
+
+      if (data.user) {
+        return { success: data.success, message: 'User created successfully', data: data.user };
+      } else {
+        return { success: data.success, message: data.message, status: data.status };
+      }
 
     } catch (err) {
 
@@ -48,7 +59,7 @@ export const useUserStore = create((set) => ({
 
     try {
       
-      const res = await axios.get('http://localhost:5000/api/users');
+      const res = await axios.get('http://localhost:5001/api/users');
     
       if (res.data.valid) {
 

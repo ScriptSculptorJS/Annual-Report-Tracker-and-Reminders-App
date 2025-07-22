@@ -18,21 +18,24 @@ function Login() {
   const handleUserLogin = async (e) => {
     e.preventDefault();
 
-    const { success, message, data, login } = await loginUser(newUser, dispatch);
-    console.log('login:', login);
+    const { success, message, data, status } = await loginUser(newUser, dispatch);
+    console.log(data);
 
-    if (!login || (!success && !data)) {
-      console.log('Message:', message);
+    if (!success) {
+      alert(`
+        Status: "${status}"
+        Error: "${message}"`
+      )
     } else {
       console.log('Success:', success);
       console.log('Message:', message);
       console.log('User:', data);
 
-      setNewUser({
+      /*setNewUser({
         firstName: '',
         email: '',
         password: '',
-      });
+      });*/
 
       navigate('/profile/', { state: {data: data, id: data._id } });
     }
@@ -42,19 +45,25 @@ function Login() {
   const handleUserSignup = async (e) => {
     e.preventDefault();
     
-    const { success, message, data } = await createUser(newUser);
+    const { success, message, data, status } = await createUser(newUser);
 
-    setNewUser({
+    /*setNewUser({
       firstName: '',
       email: '',
       password: '',
-    });
+    });*/
+    if (!data) {
+      alert(`
+        Status: "${status}"
+        Error: "${message}"`
+      )
+    } else {
+      Switch();
 
-    Switch();
-
-    console.log('Success:', success);
-    console.log('Message:', message);
-    console.log('User:', data)
+      console.log('Success:', success);
+      console.log('Message:', message);
+      console.log('User:', data)
+    }
   }
 
   function Switch() {

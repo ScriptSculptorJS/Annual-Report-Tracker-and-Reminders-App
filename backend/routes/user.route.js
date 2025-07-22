@@ -4,11 +4,11 @@ import verifyUser from '../middleware/verifyUser.js';
 
 const router = express.Router();
 
-router.use(verifyUser);
+/*router.use(verifyUser);*/
 
-router.get('/', getAccess);
+router.get('/', verifyUser, getAccess);
 router.post('/', createUser);
-router.put('/:id', updateUser)
+router.put('/:id', verifyUser, updateUser)
 router.delete('/:id', deleteUser)
 
 export default router;

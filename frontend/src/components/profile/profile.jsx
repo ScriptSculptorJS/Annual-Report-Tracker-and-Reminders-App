@@ -20,6 +20,8 @@ function Profile() {
   })
   //const signOut = useSignOut();
   //const navigate = useNavigate();
+
+  //GET RID of this in the future as it is not secure, but is useful when deleting the user for the time being.
   const location = useLocation();
   const id = location.state.id;
   const user = location.state.data;
@@ -36,7 +38,7 @@ function Profile() {
   // When have a logout button use logout function
   return(
     <>
-      <p>{user.firstName}</p>
+      <p>{user.businessName}</p>
       <p>{id}</p>
       <p>{message}</p>
     </>

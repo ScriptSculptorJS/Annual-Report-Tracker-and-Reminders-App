@@ -24,21 +24,31 @@ export const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    if (!email || !password) {
-      console.log('All fields are required')
-    };
+    if (email === '' || password === '') {
+      res.json({ 
+        status: 'Bad Request',
+        message: 'Please provide all fields.',
+        success: false
+      })
+      return;
+    }
 
     if (!validator.isEmail(email)) {
-      console.log('Email is not valid');
+      res.json({
+        status: 'Bad Request',
+        message: 'Email is not valid.',
+        success: false
+      })
+      return;
     };
 
     const foundUser = await User.findOne({ email: email });
 
     if (!foundUser) {
-      console.log('User not found');
-      res.status(404).json({
-        status: '404 Not Found',
-        message: 'User not found',
+      res.json({
+        status: 'Not Found',
+        message: 'User not found. Try again or sign up with a new account.',
+        success: false
       });
       return;
     };
@@ -49,10 +59,10 @@ export const login = async (req, res) => {
     );
 
     if (!validPassword) {
-      console.log('Password is incorrect');
-      res.status(401).json({
-        status: '401',
-        message: 'Password is incorrect'
+      res.json({
+        status: 'Unauthorized',
+        message: 'Password is incorrect.',
+        success: false
       });
       return;
     };
@@ -78,17 +88,15 @@ export const login = async (req, res) => {
     console.log('refreshToken', refreshToken);
 
     res.status(200).json({ 
-      login: true,
       success: true, 
       data: foundUser, 
     });
   } catch (err) {
     console.error('Internal Server Error:', err.message);
-    res.status(500).json({ 
-      login: false,
+    res.json({ 
       success: false, 
-      status: '500 Internal Server Error',
-      message: '500 Internal Server Error: User not logged in'
+      status: 'Internal Server Error',
+      message: 'User not logged in due to our side of things.'
     })
   }
 };

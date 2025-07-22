@@ -12,53 +12,71 @@ export const createUser = async (req, res) => {
   console.log(req.body, 'with non-hashed password');
 
   try {
-    const exists = await User.findOne({ email: user.email });
-
-    if (!user.email || !user.password) {
-      alert('Please provide all fields')
-    };
-
-    if (!validator.isEmail(user.email)) {
-      alert('Email is not valid');
+    if (user.email === '' || user.password === '') {
+      res.json({ 
+        status: 'Bad Request',
+        message: 'Please provide all fields.',
+        success: false
+      })
+      return;
     }
 
+    if (!validator.isEmail(user.email)) {
+      res.json({
+        status: 'Bad Request',
+        message: 'Email is not valid.',
+        success: false
+      })
+      return;
+    }
+
+    const exists = await User.findOne({ email: user.email });
+    console.log(exists, 'exists');
+
     if (exists) {
-      alert('Email already exists');
-    };
+      res.json({
+        status: 'Bad Request',
+        message: 'Email already exists. Try logging in with email.',
+        success: false
+      })
+      return;
+    } else {
+      // Generate salt and hash password
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(user.password, salt);
 
-    // Generate salt and hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(user.password, salt);
+      const newUser = new User({
+        ...user,
+        password: hashedPassword,
+      });
 
-    const newUser = new User({
-      ...user,
-      password: hashedPassword,
-    });
+      console.log(newUser, 'with hashed password now');
 
-    console.log(newUser, 'with hashed password now');
+      const newentry = await newUser.save();
+      console.log('Is id here?', newentry);
 
-    const newentry = await newUser.save();
-    console.log('Is id here?', newentry);
+      console.log('New user created. Please log in: ', newentry);
 
-    console.log('New user created. Please log in: ', newentry);
-
-    res.status(201).json({
-      user: newentry
-    })
+      res.status(201).json({
+        user: newentry,
+        success: true
+      })
+    }
 
   } catch (err) {
     if (err instanceof Error) {
       res.status(400).json({
-        status: '400 Bad Request',
-        message: err.message
+        status: 'Bad Request',
+        message: err.message,
+        success: false
       })
 
     } else {
       console.error('Internal Server Error:', err);
       res.status(500).json({ 
         success: false, 
-        status: '500 Internal Server Error',
-        message: '500 Internal Server Error, User not created'
+        status: 'Internal Server Error',
+        message: 'User not created due to our side of things.'
       });
     }
   }
