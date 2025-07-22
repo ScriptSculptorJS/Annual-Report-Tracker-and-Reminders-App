@@ -1,0 +1,99 @@
+.login-signup-container {
+  /*background-color: #F2F0F3;*/
+  background-color: #F8F9FF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0px 15px;
+  margin: 20px 15px;
+}
+
+.login-card,
+.signup-card {
+  background-color: #FFFFFF;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 5px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  padding: 0px 15px;
+}
+
+.app-name {
+  /*font-family: "Cinzel Decorative", serif;*/
+  margin-top: 30px;
+  margin-bottom: 0px;
+  /*color: #e76f51;*/
+  color: #232f3b;
+  text-align: center;
+  font-weight: 300;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.app-description {
+  font-size: 18px;
+  margin-top: 5px;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #4a4a4a;
+}
+
+.email-input,
+.password-input,
+.bname-input {
+  padding: 10px 10px;
+  font-size: 16px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  margin-top: 15px;
+  width: 225px;
+}
+
+.login-button,
+.sign-up-button {
+  padding: 8px 15px;
+  border-radius: 5px;
+  width: 245px;
+  font-size: 16px;
+  /*background-color: #2a9d8f;*/
+  background-color: #00065d;
+  border: none;
+  color: white;
+  margin-top: 15px;
+}
+.login-button:hover,
+.sign-up-button:hover {
+  background-color: #00cdc8;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 1px 4px;
+}
+
+.sign-up-link,
+.login-link {
+  margin-left: auto;
+  margin-top: 15px;
+  margin-right: 3px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  text-decoration: none;
+  /*color: #0000EE;
+  color: #2391eb;*/
+  color: #00cdc8;
+  font-weight: bold;
+}
+.sign-up-link:hover,
+.login-link:hover {
+  color: #009a96;
+}
+
+.sign-up-link:hover,
+.login-link:hover,
+.login-button:hover,
+.sign-up-button:hover {
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
