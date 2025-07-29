@@ -14,7 +14,7 @@ export const createEntity = async (req, res) => {
   
   const decoded = jwt.decode(access);
   const id = decoded.id
-  console.log(newInfo, access, id);
+  console.log('what info shows up here', newInfo, access, id);
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.json({ success: false, message: 'User not found', status: '404'});
@@ -23,15 +23,17 @@ export const createEntity = async (req, res) => {
   try {
     updatedInfo = await User.findByIdAndUpdate(id, {
       $push: {
-        entities: [newInfo.newObject],
-        $position: 0
+        entities: {
+          $each: [newInfo],
+          $position: 0
+        }
       }
     }, { new: true });
 
     res.json({ success: true, data: updatedInfo, status: '200' });
 
   } catch (error) {
-    res.json({ success: false, message: 'Server error', status: '500'});
+    res.json({ success: false, message: error, status: '500'});
   }
 }
 

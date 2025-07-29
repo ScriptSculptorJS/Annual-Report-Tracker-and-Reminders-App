@@ -94,15 +94,15 @@ export const useUserStore = create((set) => ({
   },
   createEntity: async (entity) => {
     axios.defaults.withCredentials = true;
-    
+    console.log(entity);
     try {
       const res = await axios.post('http://localhost:5001/api/entities', entity);
 
       const data = res.data;
 
-      console.log(res);
+      console.log(data);
 
-      return { success: data.success, message: 'User created successfully', data: data.user };
+      return { success: data.success, message: 'Entity created successfully', data: data.data };
 
     } catch (err) {
       console.log('What is the error:', err);

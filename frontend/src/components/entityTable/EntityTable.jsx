@@ -1,6 +1,10 @@
+import { useInfoStore } from '../../store/info.ts';
+
 function EntityTable(user) {
   //For testing purposes only
   const newEntitiesArray = [];
+  const entities = useInfoStore(state => state.entities);
+  console.log(entities);
   /*console.log(user.user);*/
 
   /*const testEntityArray = [{
@@ -61,8 +65,8 @@ function EntityTable(user) {
     userReference: 'STTEPS Tutoring, LLC Oregon November 05, 2026'
   }]*/
 
-  for (let i = 0; i < user.user.entities.length; i++) {
-    const entity = user.user.entities[i];
+  for (let i = 0; i < entities.length; i++) {
+    const entity = entities[i];
     
     const status = entity.status;
     let statusColor;

@@ -6,8 +6,8 @@ const router = express.Router();
 
 /*router.use(verifyUser);*/
 
-router.post('/entities', createEntity);
-router.put('/entities', verifyUser, updateEntity)
-router.delete('/entities', deleteEntity)
+router.post('/', createEntity);
+router.put('/', verifyUser, updateEntity)
+router.delete('/', deleteEntity)
 
 export default router;

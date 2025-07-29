@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../store/user.jsx';
+import { useInfoStore } from '../../store/info.ts';
 import { useAuthContext } from '../../hook/useAuthContext.jsx';
 import './login.css';
  
@@ -14,6 +15,7 @@ function Login() {
 
   const navigate = useNavigate();
   const { loginUser, createUser } = useUserStore();
+  const { updateEntities, entities } = useInfoStore();
 
   const handleUserLogin = async (e) => {
     e.preventDefault();
@@ -30,6 +32,9 @@ function Login() {
       console.log('Success:', success);
       console.log('Message:', message);
       console.log('User:', data);
+
+      updateEntities(data.entities)
+      console.log('Entities: ', entities);
 
       /*setNewUser({
         firstName: '',

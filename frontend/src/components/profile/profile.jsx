@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useUserStore } from '../../store/user.jsx';
+import { useInfoStore } from '../../store/info.ts';
 import './profile.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -58,6 +59,8 @@ function Profile() {
   const handleShow = () => setShow(true);
 
   const createEntity = useUserStore(state => state.createEntity);
+  const updateEntities = useInfoStore(state => state.updateEntities);
+
 
   const handleEntityCreation = async () => {
     setEntity({...entity, userReference: entity.name + ' ' + entity.state + ' ' + entity.dueDate})
@@ -65,8 +68,12 @@ function Profile() {
     console.log(entity);
 
     const updatedContent = await createEntity(entity);
+    updateEntities(updatedContent.data.entities);
+    
     
     console.log(updatedContent);
+
+    /*window.location.reload();*/
   }
 
   return(
@@ -75,7 +82,7 @@ function Profile() {
       <p>{id}</p>
       <p>{message}</p>
       <Button onClick={() => handleShow()}> Create Entity</Button>
-      <EntityTable user={user} />
+      <EntityTable />
 
       
       <Button> Update Entity</Button>
