@@ -15,13 +15,15 @@ function Profile() {
   const { checkAccess } = useUserStore();
   const [ entity, setEntity ] = useState({
     name: '',
-    state: '',
+    state: 'Entity state',
     dueDate: '',
-    status: '',
+    status: 'Status',
     notes: '',
     userReference: ''
   })
   const [ show, setShow ] = useState(false);
+  const [ edit, setEdit ] = useState(false);
+  const [ deleteEntity, setDeleteEntity ] = useState(false);
 
   useEffect(() => {
     async function checkingTokenAccess() {
@@ -35,7 +37,9 @@ function Profile() {
     checkingTokenAccess();
   })
 
-  
+  const handleEditEntity = (newEntity) => {
+    setEntity({...entity, newEntity})
+  }
   //const signOut = useSignOut();
   //const navigate = useNavigate();
 
@@ -58,22 +62,31 @@ function Profile() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const createEntity = useUserStore(state => state.createEntity);
+  const { createEntity, updateEntity } = useUserStore();
   const updateEntities = useInfoStore(state => state.updateEntities);
 
 
-  const handleEntityCreation = async () => {
-    setEntity({...entity, userReference: entity.name + ' ' + entity.state + ' ' + entity.dueDate})
+  const handleEntityAction = async () => {
+    if (!edit) {
+      setEntity({...entity, userReference: entity.name + ' ' + entity.state + ' ' + entity.dueDate})
 
-    console.log(entity);
+      console.log(entity);
 
-    const updatedContent = await createEntity(entity);
-    updateEntities(updatedContent.data.entities);
-    
-    
-    console.log(updatedContent);
+      const updatedContent = await createEntity(entity);
+      updateEntities(updatedContent.data.entities);
+      
+      
+      console.log(updatedContent);
 
-    /*window.location.reload();*/
+      /*window.location.reload();*/
+    } else {
+      
+      const updatedContent = await updateEntity(entity);
+      updateEntities(updatedContent.data.entities);
+      setEdit(false);
+
+      /*window.location.reload()*/
+    }
   }
 
   return(
@@ -82,7 +95,7 @@ function Profile() {
       <p>{id}</p>
       <p>{message}</p>
       <Button onClick={() => handleShow()}> Create Entity</Button>
-      <EntityTable />
+      <EntityTable handleShow={handleShow} setEntity={setEntity} setEdit={setEdit} setDelete={setDeleteEntity}/>
 
       
       <Button> Update Entity</Button>
@@ -110,7 +123,7 @@ function Profile() {
               <Dropdown onSelect={e => setEntity({...entity, state: e})} rows={3} value={entity.state}
                >
                 <Dropdown.Toggle variant='secondary' id='dropdown-basic'>
-                  Entity state
+                  {entity.state}
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu className='scrollable-dropdown-menu'>
@@ -287,7 +300,7 @@ function Profile() {
               <Dropdown onSelect={e => setEntity({...entity, status: e})} value={entity.status}
               >
                 <Dropdown.Toggle variant='secondary' id='dropdown-basic'>
-                  Status
+                  {entity.status}
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu className='scrollable-dropdown-menu'>
@@ -334,7 +347,7 @@ function Profile() {
           <Button variant="secondary" onClick={() => handleClose()}>
             Close
           </Button>
-          <Button variant="primary" onClick={() => {handleClose(); handleEntityCreation()}}>
+          <Button variant="primary" onClick={() => {handleClose(); handleEntityAction()}}>
             Save
           </Button>
         </Modal.Footer>

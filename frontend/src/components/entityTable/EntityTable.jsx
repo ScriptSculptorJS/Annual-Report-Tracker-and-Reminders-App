@@ -1,10 +1,12 @@
 import { useInfoStore } from '../../store/info.ts';
+import './entityTable.css';
 
-function EntityTable(user) {
+function EntityTable({ handleShow, setEntity, setEdit, setDeleteEntity }) {
   //For testing purposes only
   const newEntitiesArray = [];
   const entities = useInfoStore(state => state.entities);
   console.log(entities);
+  
   /*console.log(user.user);*/
 
   /*const testEntityArray = [{
@@ -96,8 +98,40 @@ function EntityTable(user) {
             <td>{entity.dueDate}</td>
             <td className={statusColor}>{status}</td>
             <td>{entity.notes}</td>
+            <td className='options' onClick={() => handleShowList(i)}>
+              &#8942;
+              <div className='entityOptions hidden' id={i}>
+                <ul>
+                  <li onClick={() => {handleShow(); setEdit(true); setEntity({...entity, name: entity.name, state: entity.state, dueDate: entity.dueDate, status: entity.status, notes: entity.notes});
+                  }}>
+                    Edit
+                  </li>
+                  <li className='delete' onClick={() => {setDeleteEntity(true); setEntity({...entity, name: entity.name, state: entity.state, dueDate: entity.dueDate, status: entity.status, notes: entity.notes});}}>
+                    Delete
+                  </li>
+                </ul>
+              </div>
+            </td>
           </tr>
     )
+  }
+
+  const handleShowList = (i) => {
+    const listContainerElement = document.getElementsByClassName('entityOptions')[i];
+    const optionsLinkElement = document.getElementsByClassName('options')[i];
+
+    if (listContainerElement.classList.contains('hidden')) {
+      
+      listContainerElement.classList.remove('hidden');
+
+      document.addEventListener('click', e => {
+        if (e.target !== listContainerElement && e.target !== optionsLinkElement) {
+          listContainerElement.classList.add('hidden');
+        }
+      })
+    } else {
+      listContainerElement.classList.add('hidden');
+    }
   }
 
   return(
@@ -109,6 +143,7 @@ function EntityTable(user) {
           <th scope="col">Due Date</th>
           <th scope="col">Status</th>
           <th scope="col">Notes</th>
+          <th scope='col'></th>
         </tr>
       </thead>
       <tbody>
