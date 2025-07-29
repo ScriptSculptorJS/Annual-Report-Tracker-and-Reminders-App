@@ -76,5 +76,62 @@ export const useUserStore = create((set) => ({
       console.log('Error collecting user data');
 
     }
-  }
+  }, 
+  updateUser: async (entity, requestType) => {
+    axios.defaults.withCredentials = true;
+
+    try {
+      const res = await axios.put('http://localhost:5001/api/users', {
+        newObject: entity,
+        requestType
+      });
+
+      console.log(res);
+      return res;
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  createEntity: async (entity) => {
+    axios.defaults.withCredentials = true;
+    
+    try {
+      const res = await axios.post('http://localhost:5001/api/entities', entity);
+
+      const data = res.data;
+
+      console.log(res);
+
+      return { success: data.success, message: 'User created successfully', data: data.user };
+
+    } catch (err) {
+      console.log('What is the error:', err);
+
+      return { message: err.response.data.message, status: err.response.status }
+    }
+  },
+  updateEntity: async (entity) => {
+    axios.defaults.withCredentials = true;
+
+    try {
+      const res = await axios.put('http://localhost:5001/api/entities', entity);
+
+      console.log(res);
+      return;
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  deleteEntity: async (entity) => {
+    axios.defaults.withCredentials = true;
+
+    try {
+      const res = await axios.delete('http://localhost:5001/api/entities', entity);
+
+      console.log(res);
+      return;
+    } catch (err) {
+      console.log(err);
+    }
+  },
 }));

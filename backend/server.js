@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import { connectDB } from './config/db.js';
 import userRoutes from './routes/user.route.js';
 import authRoutes from './routes/auth.route.js';
+import entitiesRoutes from './routes/entities.route.js';
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use('/api/users', userRoutes);
+app.use('/api/entities', entitiesRoutes);
 app.use('/api/auth', authRoutes);
 
 app.listen(PORT, () => {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserStore } from '../../store/user.js';
+import { useUserStore } from '../../store/user.jsx';
 import { useAuthContext } from '../../hook/useAuthContext.jsx';
 import './login.css';
  

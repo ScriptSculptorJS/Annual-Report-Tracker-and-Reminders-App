@@ -2,6 +2,7 @@ import User from '../models/users.model.js';
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import validator from 'validator';
+import jwt from 'jsonwebtoken';
 
 export const getAccess = async (req, res) => {
   return res.json({ valid: true, message: 'Authorized'});
@@ -83,20 +84,29 @@ export const createUser = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-  const { id } = req.params;
+  //{ id } is helpful when we are storing the id in the params, but with the authentication we want to collect it from the cookies to make it more secure
+  /*const { id } = req.params;
 
-  const user = req.body;
+  const user = req.body;*/
+
+  const newInfo = req.body;
+  const access = req.cookies.accessToken;
+  let updatedInfo;
+
+  const decoded = jwt.decode(access);
+  const id = decoded.id
+  console.log(newInfo, access, id);
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ success: false, message: 'User not found'});
+    return res.json({ success: false, message: 'User not found', status: '404'});
   }
 
   try {
-    const updatedUser = await User.findByIdAndUpdate(id, user, { new: true });
-    res.status(200).json({ success: true, data: updatedUser });
+    
+    res.status(200).json({ success: true, data: updatedInfo, status: '200' });
 
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Server error'});
+    res.json({ success: false, message: 'Server error', status: '500'});
   }
 }
 

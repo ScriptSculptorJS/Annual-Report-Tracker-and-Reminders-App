@@ -1,0 +1,51 @@
+.table {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.green {
+  color: #28a745 !important;
+}
+
+.brightGreen {
+  color: #2ecc71 !important;
+}
+
+.amberYellow {
+  color: #f0ad4e !important;
+}
+
+.orange {
+  color: #fd7e14 !important;
+}
+
+.redOrange {
+  color: #e55353 !important;
+}
+
+.red {
+  color: #dc3545 !important;
+}
+
+.gray {
+  color: #6c757d !important;
+}
+
+.lightGray {
+  color: #adb5bd !important;
+}
+
+.green,
+.brightGreen,
+.amberYellow,
+.orange,
+.redOrange,
+.red,
+.gray,
+.lightGray {
+  font-weight: bold;
+}
+
+.scrollable-dropdown-menu {
+  max-height: 200px;
+  overflow-y: scroll;
+}
