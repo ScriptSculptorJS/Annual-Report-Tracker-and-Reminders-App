@@ -1,7 +1,7 @@
 import { useInfoStore } from '../../store/info.ts';
 import './entityTable.css';
 
-function EntityTable({ handleShow, setEntity, setEdit, setDeleteEntity }) {
+function EntityTable({ handleShow, setEntity, setEdit, setDeleteEntity, setEntityIndex }) {
   //For testing purposes only
   const newEntitiesArray = [];
   const entities = useInfoStore(state => state.entities);
@@ -102,7 +102,7 @@ function EntityTable({ handleShow, setEntity, setEdit, setDeleteEntity }) {
               &#8942;
               <div className='entityOptions hidden' id={i}>
                 <ul>
-                  <li onClick={() => {handleShow(); setEdit(true); setEntity({...entity, name: entity.name, state: entity.state, dueDate: entity.dueDate, status: entity.status, notes: entity.notes});
+                  <li onClick={() => {handleShow(); setEdit(true); setEntityIndex(i); setEntity({...entity, name: entity.name, state: entity.state, dueDate: entity.dueDate, status: entity.status, notes: entity.notes});
                   }}>
                     Edit
                   </li>

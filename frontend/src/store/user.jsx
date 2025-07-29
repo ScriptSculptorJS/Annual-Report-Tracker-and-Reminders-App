@@ -110,16 +110,22 @@ export const useUserStore = create((set) => ({
       return { message: err.response.data.message, status: err.response.status }
     }
   },
-  updateEntity: async (entity) => {
+  updateEntity: async (entity, index) => {
     axios.defaults.withCredentials = true;
+    console.log('we are in the store for editing entity', entity, index)
 
     try {
-      const res = await axios.put('http://localhost:5001/api/entities', entity);
+      const res = await axios.put('http://localhost:5001/api/entities', { entity, index });
 
       console.log(res);
-      return;
+      const data = res.data;
+      
+      return { success: data.success, message: 'Entity updated successfully', data: data.data };
+
     } catch (err) {
-      console.log(err);
+
+      return { message: err.response.data.message, status: err.response.status }
+
     }
   },
   deleteEntity: async (entity) => {

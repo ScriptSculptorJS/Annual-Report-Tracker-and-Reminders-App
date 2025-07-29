@@ -59,12 +59,12 @@ export const updateEntity = async (req, res) => {
     
     updatedInfo = await User.findByIdAndUpdate(id, {
       $set: {
-        [`entities.${newInfo.index}.name`]: newInfo.newObject.name,
-        [`entities.${newInfo.index}.state`]: newInfo.newObject.state,
-        [`entities.${newInfo.index}.dueDate`]: newInfo.newObject.dueDate,
-        [`entities.${newInfo.index}.status`]: newInfo.newObject.status,
-        [`entities.${newInfo.index}.notes`]: newInfo.newObject.notes,
-        [`entities.${newInfo.index}. userReference`]: newInfo.newObject.userReference
+        [`entities.${newInfo.index}.name`]: newInfo.entity.name,
+        [`entities.${newInfo.index}.state`]: newInfo.entity.state,
+        [`entities.${newInfo.index}.dueDate`]: newInfo.entity.dueDate,
+        [`entities.${newInfo.index}.status`]: newInfo.entity.status,
+        [`entities.${newInfo.index}.notes`]: newInfo.entity.notes,
+        [`entities.${newInfo.index}. userReference`]: newInfo.entity.userReference
       }
     }, { new: true });
     

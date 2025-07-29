@@ -21,6 +21,7 @@ function Profile() {
     notes: '',
     userReference: ''
   })
+  const [ entityIndex, setEntityIndex ] = useState();
   const [ show, setShow ] = useState(false);
   const [ edit, setEdit ] = useState(false);
   const [ deleteEntity, setDeleteEntity ] = useState(false);
@@ -67,11 +68,11 @@ function Profile() {
 
 
   const handleEntityAction = async () => {
+    
+    setEntity({...entity, userReference: entity.name + ' ' + entity.state + ' ' + entity.dueDate})
+
+    console.log(entity);
     if (!edit) {
-      setEntity({...entity, userReference: entity.name + ' ' + entity.state + ' ' + entity.dueDate})
-
-      console.log(entity);
-
       const updatedContent = await createEntity(entity);
       updateEntities(updatedContent.data.entities);
       
@@ -81,7 +82,7 @@ function Profile() {
       /*window.location.reload();*/
     } else {
       
-      const updatedContent = await updateEntity(entity);
+      const updatedContent = await updateEntity(entity, entityIndex);
       updateEntities(updatedContent.data.entities);
       setEdit(false);
 
@@ -95,7 +96,7 @@ function Profile() {
       <p>{id}</p>
       <p>{message}</p>
       <Button onClick={() => handleShow()}> Create Entity</Button>
-      <EntityTable handleShow={handleShow} setEntity={setEntity} setEdit={setEdit} setDelete={setDeleteEntity}/>
+      <EntityTable handleShow={handleShow} setEntity={setEntity} setEdit={setEdit} setDelete={setDeleteEntity} setEntityIndex={setEntityIndex}/>
 
       
       <Button> Update Entity</Button>
