@@ -8,6 +8,6 @@ const router = express.Router();
 
 router.post('/', createEntity);
 router.put('/', verifyUser, updateEntity)
-router.delete('/', deleteEntity)
+router.put('/:id', deleteEntity)
 
 export default router;

@@ -20,13 +20,22 @@ export const createEntity = async (req, res) => {
     return res.json({ success: false, message: 'User not found', status: '404'});
   }
 
+  const newObjectId = new mongoose.Types.ObjectId();
+
+
   try {
     updatedInfo = await User.findByIdAndUpdate(id, {
       $push: {
         entities: {
-          $each: [newInfo],
+            _id: newObjectId,
+            name: newInfo.name,
+            state: newInfo.state,
+            dueDate: newInfo.dueDate,
+            status: newInfo.status,
+            notes: newInfo.notes,
+            userReference: newInfo.userReference
+          },
           $position: 0
-        }
       }
     }, { new: true });
 
@@ -80,14 +89,14 @@ export const deleteEntity = async (req, res) => {
   /*const { id } = req.params;
 
   const user = req.body;*/
-
-  const newInfo = req.body;
+  
+  const { entityId } = req.body;
   const access = req.cookies.accessToken;
   let updatedInfo;
 
   const decoded = jwt.decode(access);
   const id = decoded.id
-  console.log(newInfo, access, id);
+  console.log('this is where the id should be',entityId, access, id);
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.json({ success: false, message: 'User not found', status: '404'});
@@ -98,7 +107,7 @@ export const deleteEntity = async (req, res) => {
     updatedInfo = await User.findByIdAndUpdate(id, {
       $pull: {
         entities: {
-          userReference: newInfo.newObject,
+          _id: entityId,
         }
       }
     }, { new: true });

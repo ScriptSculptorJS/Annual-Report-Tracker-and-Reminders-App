@@ -119,25 +119,30 @@ export const useUserStore = create((set) => ({
 
       console.log(res);
       const data = res.data;
-      
+
       return { success: data.success, message: 'Entity updated successfully', data: data.data };
 
     } catch (err) {
-
+      console.log('error message when creating entity:', err)
       return { message: err.response.data.message, status: err.response.status }
 
     }
   },
-  deleteEntity: async (entity) => {
+  deleteEntity: async (entityId) => {
     axios.defaults.withCredentials = true;
+    console.log('we are in store to delete entity', entityId)
 
     try {
-      const res = await axios.delete('http://localhost:5001/api/entities', entity);
+      const res = await axios.put('http://localhost:5001/api/entities/:id', {entityId});
 
       console.log(res);
-      return;
+      const data = res.data;
+      return { success: data.success, message: 'Entity deleted successfully', data: data.data };
+
     } catch (err) {
-      console.log(err);
+      console.log('What is the error:', err);
+
+      return { message: err.response.data.message, status: err.response.status }
     }
   },
 }));

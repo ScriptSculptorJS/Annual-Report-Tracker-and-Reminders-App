@@ -19,12 +19,11 @@ function Profile() {
     dueDate: '',
     status: 'Status',
     notes: '',
-    userReference: ''
   })
   const [ entityIndex, setEntityIndex ] = useState();
+  const [ entityId, setEntityId ] = useState();
   const [ show, setShow ] = useState(false);
   const [ edit, setEdit ] = useState(false);
-  const [ deleteEntity, setDeleteEntity ] = useState(false);
 
   useEffect(() => {
     async function checkingTokenAccess() {
@@ -38,9 +37,7 @@ function Profile() {
     checkingTokenAccess();
   })
 
-  const handleEditEntity = (newEntity) => {
-    setEntity({...entity, newEntity})
-  }
+  
   //const signOut = useSignOut();
   //const navigate = useNavigate();
 
@@ -60,7 +57,10 @@ function Profile() {
 
   // When have a logout button use logout function
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    setEntity({...entity, name: '', state: '', dueDate: '', status: '', notes: ''})
+  }
   const handleShow = () => setShow(true);
 
   const { createEntity, updateEntity } = useUserStore();
@@ -68,11 +68,13 @@ function Profile() {
 
 
   const handleEntityAction = async () => {
-    
-    setEntity({...entity, userReference: entity.name + ' ' + entity.state + ' ' + entity.dueDate})
+
+    console.log(entity.name + ' ' + entity.state + ' ' + entity.dueDate)
 
     console.log(entity);
     if (!edit) {
+      
+
       const updatedContent = await createEntity(entity);
       updateEntities(updatedContent.data.entities);
       
@@ -81,10 +83,15 @@ function Profile() {
 
       /*window.location.reload();*/
     } else {
-      
+    
+      console.log(entity);
+
       const updatedContent = await updateEntity(entity, entityIndex);
+      console.log('Do we see the updated info?', updatedContent.data.entities);
       updateEntities(updatedContent.data.entities);
       setEdit(false);
+
+      setEntity({...entity, name: '', state: '', dueDate: '', status: '', notes: ''})
 
       /*window.location.reload()*/
     }
@@ -96,14 +103,14 @@ function Profile() {
       <p>{id}</p>
       <p>{message}</p>
       <Button onClick={() => handleShow()}> Create Entity</Button>
-      <EntityTable handleShow={handleShow} setEntity={setEntity} setEdit={setEdit} setDelete={setDeleteEntity} setEntityIndex={setEntityIndex}/>
+      <EntityTable handleShow={handleShow} setEntity={setEntity} setEdit={setEdit} setEntityIndex={setEntityIndex} entity={entity} />
 
       
       <Button> Update Entity</Button>
       <Button> Delete Entity</Button>
       <Modal show={show}  onHide={() => handleClose()}>
         <Modal.Header closeButton>
-          <Modal.Title>Create new entity</Modal.Title>
+          <Modal.Title>Your entity</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -112,7 +119,7 @@ function Profile() {
               <Form.Control
                 type="name"
                 value={entity.name}
-                onChange={e => setEntity({ ...entity, name: e.target.value })}
+                onChange={e => {setEntity({ ...entity, name: e.target.value })}}
                 autoFocus
               />
             </Form.Group>
@@ -121,7 +128,7 @@ function Profile() {
               className="mb-3"
               controlId="exampleForm.ControlTextarea1"
             >
-              <Dropdown onSelect={e => setEntity({...entity, state: e})} rows={3} value={entity.state}
+              <Dropdown onSelect={e => setEntity({...entity, state: e })} rows={3} value={entity.state}
                >
                 <Dropdown.Toggle variant='secondary' id='dropdown-basic'>
                   {entity.state}
@@ -291,7 +298,7 @@ function Profile() {
             >
               <Form.Label>Due date</Form.Label>
               <Form.Control as="textarea" rows={1} placeholder='month date, year (i.e. March 21, 2026)' value={entity.dueDate}
-              onChange={e => setEntity({ ...entity, dueDate: e.target.value})} />
+              onChange={e => setEntity({ ...entity, dueDate: e.target.value })} />
             </Form.Group>
 
             <Form.Group

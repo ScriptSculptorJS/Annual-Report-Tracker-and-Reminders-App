@@ -15,7 +15,6 @@ const entitySchema = new mongoose.Schema({
   },
   status: String,
   notes: String,
-  userReference: String,
 })
 
 const userSchema = new mongoose.Schema({

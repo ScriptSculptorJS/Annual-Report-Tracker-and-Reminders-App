@@ -1,10 +1,13 @@
 import { useInfoStore } from '../../store/info.ts';
+import { useUserStore } from '../../store/user.jsx';
 import './entityTable.css';
 
-function EntityTable({ handleShow, setEntity, setEdit, setDeleteEntity, setEntityIndex }) {
+function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity }) {
   //For testing purposes only
   const newEntitiesArray = [];
-  const entities = useInfoStore(state => state.entities);
+  const { entities } = useInfoStore();
+  const { deleteEntity } = useUserStore();
+  const { updateEntities } = useInfoStore();
   console.log(entities);
   
   /*console.log(user.user);*/
@@ -67,8 +70,19 @@ function EntityTable({ handleShow, setEntity, setEdit, setDeleteEntity, setEntit
     userReference: 'STTEPS Tutoring, LLC Oregon November 05, 2026'
   }]*/
 
+    const deleteEntityObject = async (entityId) => {
+      const res = await deleteEntity(entityId);
+
+      console.log(res);
+
+      updateEntities(res.data.entities);
+
+      setEntity({...entity, name: '', state: '', dueDate: '', status: '', notes: ''})
+    }
+
   for (let i = 0; i < entities.length; i++) {
     const entity = entities[i];
+    console.log(entity);
     
     const status = entity.status;
     let statusColor;
@@ -106,7 +120,7 @@ function EntityTable({ handleShow, setEntity, setEdit, setDeleteEntity, setEntit
                   }}>
                     Edit
                   </li>
-                  <li className='delete' onClick={() => {setDeleteEntity(true); setEntity({...entity, name: entity.name, state: entity.state, dueDate: entity.dueDate, status: entity.status, notes: entity.notes});}}>
+                  <li className='delete' onClick={() => {deleteEntityObject(entity._id);}}>
                     Delete
                   </li>
                 </ul>
