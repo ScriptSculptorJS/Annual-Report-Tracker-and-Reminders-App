@@ -6,7 +6,7 @@ interface User {
   entities: []
 }
 
-export const useInfoStore = create<User>() (persist((set, get) => ({
+export const useInfoStore = create<User>() (persist((set) => ({
   businessName: '',
   updateBusinessName: (newBusinessName: string) => {
     set({ businessName: newBusinessName})
