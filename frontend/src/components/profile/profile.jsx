@@ -4,6 +4,7 @@ import { useUserStore } from '../../store/user.jsx';
 import { useInfoStore } from '../../store/info.ts';
 import './profile.css';
 import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -11,7 +12,6 @@ import EntityTable from '../entityTable/EntityTable.jsx';
 
 function Profile() {
   const [ message, setMessage ] = useState();
-  const navigate = useNavigate();
   const { checkAccess } = useUserStore();
   const [ entity, setEntity ] = useState({
     name: '',
@@ -21,30 +21,36 @@ function Profile() {
     notes: '',
   })
   const [ entityIndex, setEntityIndex ] = useState();
-  const [ entityId, setEntityId ] = useState();
   const [ show, setShow ] = useState(false);
   const [ edit, setEdit ] = useState(false);
 
+  //Checks that the user has access by checking their tokens stored in the cookies in the backend, if not successful it navigates the user to the login page
   useEffect(() => {
     async function checkingTokenAccess() {
-      /*console.log('is this triggering upon refreshing page?');*/
       const res = await checkAccess();
-      /*console.log(res);*/
+      
       if (!res.valid) {
         navigate('/')
       }
     }
+
     checkingTokenAccess();
+
   })
 
-  
   //const signOut = useSignOut();
   //const navigate = useNavigate();
 
   //GET RID of this in the future as it is not secure, but is useful when deleting the user for the time being.
   const location = useLocation();
-  const id = location.state.id;
-  const user = location.state.data;
+  const navigate = useNavigate();
+  //Collects variables and methods from stores
+  const { createEntity, updateEntity } = useUserStore();
+  const { updateEntities, entities } = useInfoStore();
+  const handleShow = () => setShow(true);
+  const listRenderingArray = []
+  /*const id = location.state.id;
+  const user = location.state.data;*/
   /*console.log(id)
   
   console.log(user);*/
@@ -57,65 +63,81 @@ function Profile() {
 
   // When have a logout button use logout function
 
+  //Checks if the entities array is empty, if it is a message alerts the user, if not then it renders the entities in a table
+  if (entities.length === 0) {
+    listRenderingArray.push(
+      <p key='empty' className='red'>
+        You currently do not have any entities saved
+      </p>
+    ) 
+  } else {
+    listRenderingArray.push(
+      <EntityTable 
+        handleShow={handleShow} 
+        setEntity={setEntity} 
+        setEdit={setEdit} 
+        setEntityIndex={setEntityIndex} 
+        entity={entity} 
+      />
+    ) 
+  }
+
+  //Closes the modal and resets the entity state
   const handleClose = () => {
     setShow(false);
     setEntity({...entity, name: '', state: '', dueDate: '', status: '', notes: ''})
   }
-  const handleShow = () => setShow(true);
 
-  const { createEntity, updateEntity } = useUserStore();
-  const updateEntities = useInfoStore(state => state.updateEntities);
-
-
+  //Checks if user clicked to edit an entity, if not then creates a new entity, updates the entities in the info store, and resets the entity state. Otherwise, it updates the entity, updates the entities in the info store, sets the edit state back to false, and resets the entities state
   const handleEntityAction = async () => {
-
-    console.log(entity.name + ' ' + entity.state + ' ' + entity.dueDate)
-
-    console.log(entity);
     if (!edit) {
       
-
       const updatedContent = await createEntity(entity);
       updateEntities(updatedContent.data.entities);
-      
-      
-      console.log(updatedContent);
-
-      /*window.location.reload();*/
-    } else {
-    
-      console.log(entity);
-
-      const updatedContent = await updateEntity(entity, entityIndex);
-      console.log('Do we see the updated info?', updatedContent.data.entities);
-      updateEntities(updatedContent.data.entities);
-      setEdit(false);
-
       setEntity({...entity, name: '', state: '', dueDate: '', status: '', notes: ''})
 
-      /*window.location.reload()*/
+    } else {
+
+      const updatedContent = await updateEntity(entity, entityIndex);
+      updateEntities(updatedContent.data.entities);
+      setEdit(false);
+      setEntity({...entity, name: '', state: '', dueDate: '', status: '', notes: ''})
+
     }
   }
 
   return(
     <>
-      <p>{user.businessName}</p>
-      <p>{id}</p>
-      <p>{message}</p>
-      <Button onClick={() => handleShow()}> Create Entity</Button>
-      <EntityTable handleShow={handleShow} setEntity={setEntity} setEdit={setEdit} setEntityIndex={setEntityIndex} entity={entity} />
-
+      <Card>
+        <Card.Header className='header-title'>
+          Your Entities
+        </Card.Header>
+        <Card.Body>
+          {listRenderingArray}
+          <Button onClick={() => handleShow()}> 
+            Create Entity
+          </Button>
+        </Card.Body>
+      </Card>
       
-      <Button> Update Entity</Button>
-      <Button> Delete Entity</Button>
-      <Modal show={show}  onHide={() => handleClose()}>
+      <Modal 
+        show={show}  
+        onHide={() => handleClose()}
+      >
         <Modal.Header closeButton>
-          <Modal.Title>Your entity</Modal.Title>
+          <Modal.Title>
+            Your entity
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Entity name</Form.Label>
+            <Form.Group 
+              className="mb-3" 
+              controlId="exampleForm.ControlInput1"
+            >
+              <Form.Label>
+                Entity name
+              </Form.Label>
               <Form.Control
                 type="name"
                 value={entity.name}
@@ -128,9 +150,15 @@ function Profile() {
               className="mb-3"
               controlId="exampleForm.ControlTextarea1"
             >
-              <Dropdown onSelect={e => setEntity({...entity, state: e })} rows={3} value={entity.state}
-               >
-                <Dropdown.Toggle variant='secondary' id='dropdown-basic'>
+              <Dropdown 
+                onSelect={e => setEntity({...entity, state: e })} 
+                rows={3} 
+                value={entity.state}
+              >
+                <Dropdown.Toggle 
+                  variant='secondary' 
+                  id='dropdown-basic'
+                >
                   {entity.state}
                 </Dropdown.Toggle>
 
@@ -297,17 +325,27 @@ function Profile() {
               controlId="exampleForm.ControlTextarea1"
             >
               <Form.Label>Due date</Form.Label>
-              <Form.Control as="textarea" rows={1} placeholder='month date, year (i.e. March 21, 2026)' value={entity.dueDate}
-              onChange={e => setEntity({ ...entity, dueDate: e.target.value })} />
+              <Form.Control 
+                as="textarea" 
+                rows={1} 
+                placeholder='month date, year (i.e. March 21, 2026)' 
+                value={entity.dueDate}
+                onChange={e => setEntity({ ...entity, dueDate: e.target.value })} 
+              />
             </Form.Group>
 
             <Form.Group
               className="mb-3"
               controlId="exampleForm.ControlTextarea1"
             >
-              <Dropdown onSelect={e => setEntity({...entity, status: e})} value={entity.status}
+              <Dropdown 
+                onSelect={e => setEntity({...entity, status: e})} 
+                value={entity.status}
               >
-                <Dropdown.Toggle variant='secondary' id='dropdown-basic'>
+                <Dropdown.Toggle 
+                  variant='secondary' 
+                  id='dropdown-basic'
+                >
                   {entity.status}
                 </Dropdown.Toggle>
 
@@ -345,17 +383,30 @@ function Profile() {
               controlId="exampleForm.ControlTextarea1"
             >
               <Form.Label>Notes</Form.Label>
-              <Form.Control as="textarea" rows={3} value={entity.notes}
-              onChange={e => setEntity({ ...entity, notes: e.target.value})} />
+              <Form.Control 
+                as="textarea" 
+                rows={3} 
+                value={entity.notes}
+                onChange={e => setEntity({ ...entity, notes: e.target.value})} 
+              />
             </Form.Group>
 
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => handleClose()}>
+          <Button 
+            variant="secondary" 
+            onClick={() => handleClose()}
+          >
             Close
           </Button>
-          <Button variant="primary" onClick={() => {handleClose(); handleEntityAction()}}>
+          <Button 
+            variant="primary" 
+            onClick={() => {
+              handleClose(); 
+              handleEntityAction()
+            }}
+          >
             Save
           </Button>
         </Modal.Footer>

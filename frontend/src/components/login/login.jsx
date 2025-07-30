@@ -2,26 +2,24 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../store/user.jsx';
 import { useInfoStore } from '../../store/info.ts';
-import { useAuthContext } from '../../hook/useAuthContext.jsx';
 import './login.css';
  
 function Login() {
+
   const [newUser, setNewUser] = useState({
     businessName: '',
     email: '',
     password: '',
   });
-  const { user, dispatch } = useAuthContext();
+  const { loginUser, createUser } = useUserStore();
 
   const navigate = useNavigate();
-  const { loginUser, createUser } = useUserStore();
-  const { updateEntities, entities } = useInfoStore();
 
+  //Runs api request to get user, alert if any errors occurred with why it happened, if successful updates entities in info store and navigates user to their profile
   const handleUserLogin = async (e) => {
     e.preventDefault();
 
-    const { success, message, data, status } = await loginUser(newUser, dispatch);
-    console.log(data);
+    const { success, message, data, status } = await loginUser(newUser);
 
     if (!success) {
       alert(`
@@ -34,29 +32,17 @@ function Login() {
       console.log('User:', data);
 
       updateEntities(data.entities)
-      console.log('Entities: ', entities);
-
-      /*setNewUser({
-        firstName: '',
-        email: '',
-        password: '',
-      });*/
 
       navigate('/profile/', { state: {data: data, id: data._id } });
     }
   };
 
-
+  //Creates new user, alerts user of any errors that may have occurred in the creation with a message, if successful switches to the login form with fields filled
   const handleUserSignup = async (e) => {
     e.preventDefault();
     
     const { success, message, data, status } = await createUser(newUser);
 
-    /*setNewUser({
-      firstName: '',
-      email: '',
-      password: '',
-    });*/
     if (!data) {
       alert(`
         Status: "${status}"
@@ -71,6 +57,7 @@ function Login() {
     }
   }
 
+  //Switches from login form to signup form and vice versa
   function Switch() {
 
     const loginCardElement = document.querySelector('.js-login-card');
@@ -125,7 +112,9 @@ function Login() {
               Login
           </button>
 
-          <p className='login-link js-login-link' onClick={Switch}>Create account</p>
+          <p className='login-link js-login-link' onClick={Switch}>
+            Create account
+          </p>
       </div>
       <div 
         className='signup-card js-signup-card hidden'
@@ -164,7 +153,9 @@ function Login() {
               Sign Up
           </button>
 
-          <p className='sign-up-link js-sign-up-link' onClick={Switch}>Already have an account?</p>
+          <p className='sign-up-link js-sign-up-link' onClick={Switch}>
+            Already have an account?
+          </p>
       </div>
     </div>
   )

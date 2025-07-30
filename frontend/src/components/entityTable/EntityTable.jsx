@@ -3,87 +3,15 @@ import { useUserStore } from '../../store/user.jsx';
 import './entityTable.css';
 
 function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity }) {
-  //For testing purposes only
+
   const newEntitiesArray = [];
-  const { entities } = useInfoStore();
+  //Collects variables and methods to use later
+  const { entities, updateEntities } = useInfoStore();
   const { deleteEntity } = useUserStore();
-  const { updateEntities } = useInfoStore();
-  console.log(entities);
-  
-  /*console.log(user.user);*/
 
-  /*const testEntityArray = [{
-    name: 'STTEPS Tutoring, LLC',
-    state: 'Washington',
-    dueDate: 'March 21, 2026',
-    status: 'Active',
-    notes: '',
-    userReference: 'STTEPSTutoring, LLC Washington March 21, 2026'
-  }, {
-    name: 'STTEPS Tutoring, LLC',
-    state: 'Oregon',
-    dueDate: 'November 05, 2025',
-    status: 'Active',
-    notes: 'Some random notes',
-    userReference: 'STTEPS Tutoring, LLC Oregon November 05, 2026'
-  }, {
-    name: 'STTEPS Tutoring, LLC',
-    state: 'Oregon',
-    dueDate: 'November 05, 2025',
-    status: 'Inactive',
-    notes: 'Some random notes',
-    userReference: 'STTEPS Tutoring, LLC Oregon November 05, 2026'
-  }, {
-    name: 'STTEPS Tutoring, LLC',
-    state: 'Oregon',
-    dueDate: 'November 05, 2025',
-    status: 'Pending',
-    notes: 'Some random notes',
-    userReference: 'STTEPS Tutoring, LLC Oregon November 05, 2026'
-  }, {
-    name: 'STTEPS Tutoring, LLC',
-    state: 'Oregon',
-    dueDate: 'November 05, 2025',
-    status: 'Not in Good Standing',
-    notes: 'Some random notes',
-    userReference: 'STTEPS Tutoring, LLC Oregon November 05, 2026'
-  }, {
-    name: 'STTEPS Tutoring, LLC',
-    state: 'Oregon',
-    dueDate: 'November 05, 2025',
-    status: 'Dissolved',
-    notes: 'Some random notes',
-    userReference: 'STTEPS Tutoring, LLC Oregon November 05, 2026'
-  }, {
-    name: 'STTEPS Tutoring, LLC',
-    state: 'Oregon',
-    dueDate: 'November 05, 2025',
-    status: 'Suspended',
-    notes: 'Some random notes',
-    userReference: 'STTEPS Tutoring, LLC Oregon November 05, 2026'
-  }, {
-    name: 'STTEPS Tutoring, LLC',
-    state: 'Oregon',
-    dueDate: 'November 05, 2025',
-    status: 'Revoked',
-    notes: 'Some random notes',
-    userReference: 'STTEPS Tutoring, LLC Oregon November 05, 2026'
-  }]*/
-
-    const deleteEntityObject = async (entityId) => {
-      const res = await deleteEntity(entityId);
-
-      console.log(res);
-
-      updateEntities(res.data.entities);
-
-      setEntity({...entity, name: '', state: '', dueDate: '', status: '', notes: ''})
-    }
-
+  //Interates through the entities array and creates HTML for each entity with specific styling based on its status
   for (let i = 0; i < entities.length; i++) {
     const entity = entities[i];
-    console.log(entity);
-    
     const status = entity.status;
     let statusColor;
 
@@ -116,7 +44,11 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
               &#8942;
               <div className='entityOptions hidden' id={i}>
                 <ul>
-                  <li onClick={() => {handleShow(); setEdit(true); setEntityIndex(i); setEntity({...entity, name: entity.name, state: entity.state, dueDate: entity.dueDate, status: entity.status, notes: entity.notes});
+                  <li onClick={() => {
+                    handleShow(); 
+                    setEdit(true); 
+                    setEntityIndex(i); 
+                    setEntity({...entity, name: entity.name, state: entity.state, dueDate: entity.dueDate, status: entity.status, notes: entity.notes});
                   }}>
                     Edit
                   </li>
@@ -130,6 +62,7 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
     )
   }
 
+  //Checks if entities array is empty and renders message to user that they do not have entities, or renders a table consisting of their entities
   const handleShowList = (i) => {
     const listContainerElement = document.getElementsByClassName('entityOptions')[i];
     const optionsLinkElement = document.getElementsByClassName('options')[i];
@@ -138,14 +71,25 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
       
       listContainerElement.classList.remove('hidden');
 
+      //Add an event listener to see if the user clicks outside of the ellipsis or dropdown menu to edit or delete and hides the dropdown
       document.addEventListener('click', e => {
         if (e.target !== listContainerElement && e.target !== optionsLinkElement) {
           listContainerElement.classList.add('hidden');
         }
       })
+
     } else {
       listContainerElement.classList.add('hidden');
     }
+  }
+
+  //Deletes entity from database and updates entities in the info store
+  const deleteEntityObject = async (entityId) => {
+    const res = await deleteEntity(entityId);
+
+    updateEntities(res.data.entities);
+
+    setEntity({...entity, name: '', state: '', dueDate: '', status: '', notes: ''})
   }
 
   return(
