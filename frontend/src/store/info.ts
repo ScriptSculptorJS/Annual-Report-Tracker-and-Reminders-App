@@ -8,6 +8,9 @@ interface User {
 
 export const useInfoStore = create<User>() (persist((set, get) => ({
   businessName: '',
+  updateBusinessName: (newBusinessName: string) => {
+    set({ businessName: newBusinessName})
+  },
   entities: [],
   updateEntities: (newEntitiesArray: []) => {
     set({ entities: newEntitiesArray})

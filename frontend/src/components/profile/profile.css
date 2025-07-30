@@ -1,6 +1,11 @@
+.card-body {
+  padding: 25px;
+}
+
 .header-title {
   font-size: 18px;
   font-weight: bold;
+  text-align: center;
 }
 
 .table {

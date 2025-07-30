@@ -102,7 +102,7 @@ export const useUserStore = create((set) => ({
 
       console.log(data);
 
-      return { success: data.success, message: 'Entity created successfully', data: data.data };
+      return { success: data.success, message: data.message, data: data.data, status: data.status };
 
     } catch (err) {
       console.log('What is the error:', err);
@@ -120,7 +120,7 @@ export const useUserStore = create((set) => ({
       console.log(res);
       const data = res.data;
 
-      return { success: data.success, message: 'Entity updated successfully', data: data.data };
+      return { success: data.success, message: data.message, data: data.data };
 
     } catch (err) {
       console.log('error message when creating entity:', err)
@@ -137,7 +137,7 @@ export const useUserStore = create((set) => ({
 
       console.log(res);
       const data = res.data;
-      return { success: data.success, message: 'Entity deleted successfully', data: data.data };
+      return { success: data.success, message: data.message, data: data.data, status: data.status };
 
     } catch (err) {
       console.log('What is the error:', err);

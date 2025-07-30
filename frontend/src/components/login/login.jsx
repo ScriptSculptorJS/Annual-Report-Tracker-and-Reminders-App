@@ -12,6 +12,7 @@ function Login() {
     password: '',
   });
   const { loginUser, createUser } = useUserStore();
+  const { updateEntities, updateBusinessName } = useInfoStore();
 
   const navigate = useNavigate();
 
@@ -32,6 +33,7 @@ function Login() {
       console.log('User:', data);
 
       updateEntities(data.entities)
+      updateBusinessName(data.businessName);
 
       navigate('/profile/', { state: {data: data, id: data._id } });
     }

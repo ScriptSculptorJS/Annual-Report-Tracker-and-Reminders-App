@@ -1,9 +1,11 @@
-function Header() {
+import './header.css';
+
+function Header({ name }) {
 
   return(
-    <>
-      Header
-    </>
+    <div className='header'>
+      <h1>Welcome {name}!</h1>
+    </div>
   )
 }
 

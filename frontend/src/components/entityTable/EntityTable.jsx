@@ -15,6 +15,13 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
     const status = entity.status;
     let statusColor;
 
+    const dateFromMongo = new Date(entity.dueDate);
+    const formattedDate = dateFromMongo.toLocaleString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric'
+    })
+
     if (status === 'Active') {
       statusColor = 'green'
     } else if (status === 'Good Standing') {
@@ -37,7 +44,7 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
           <tr key={i}>
             <th scope="row" className='fw-normal'>{entity.name}</th>
             <td>{entity.state}</td>
-            <td>{entity.dueDate}</td>
+            <td>{formattedDate}</td>
             <td className={statusColor}>{status}</td>
             <td>{entity.notes}</td>
             <td className='options' onClick={() => handleShowList(i)}>
@@ -48,7 +55,7 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
                     handleShow(); 
                     setEdit(true); 
                     setEntityIndex(i); 
-                    setEntity({...entity, name: entity.name, state: entity.state, dueDate: entity.dueDate, status: entity.status, notes: entity.notes});
+                    setEntity({...entity, name: entity.name, state: entity.state, dueDate: formattedDate, status: entity.status, notes: entity.notes});
                   }}>
                     Edit
                   </li>
@@ -85,11 +92,23 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
 
   //Deletes entity from database and updates entities in the info store
   const deleteEntityObject = async (entityId) => {
-    const res = await deleteEntity(entityId);
+    const updatedContent = await deleteEntity(entityId);
 
-    updateEntities(res.data.entities);
+    if (!updatedContent.data) {
 
-    setEntity({...entity, name: '', state: '', dueDate: '', status: '', notes: ''})
+      alert(`
+        Status: ${updatedContent.status}
+        Message: "${updatedContent.message}"
+      `)
+
+    } else {
+
+      updateEntities(updatedContent.data.entities);
+      setEntity({...entity, name: '', state: 'Entity state', dueDate: '', status: 'Status', notes: ''})
+
+    }
+
+    
   }
 
   return(

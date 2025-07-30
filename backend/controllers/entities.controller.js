@@ -9,6 +9,16 @@ export const createEntity = async (req, res) => {
   const user = req.body;*/
   console.log('we are in backend to create entity')
   const newInfo = req.body;
+   const dateFormatRegex = /^(January|February|March|April|May|June|July|August|September|October|November|December)\s\d{1,2},\s\d{4}$/
+
+  if (newInfo.name === '' || newInfo.state === '' || newInfo.dueDate === '' || newInfo.status === '') {
+    return res.json({ success: false, message: 'All fields must be filled except for Notes', status: 'Bad request' })
+  }
+
+  if (!dateFormatRegex.test(newInfo.dueDate)) {
+    return res.json({ success: false, message: 'Date is not in valid formatting', status: 'Bad request'})
+  }
+
   const access = req.cookies.accessToken;
   let updatedInfo;
   
@@ -53,6 +63,17 @@ export const updateEntity = async (req, res) => {
   const user = req.body;*/
 
   const newInfo = req.body;
+  const dateFormatRegex = /^(January|February|March|April|May|June|July|August|September|October|November|December)\s\d{1,2},\s\d{4}$/
+
+  if (newInfo.entity.name === '' || newInfo.entity.state === '' || newInfo.entity.dueDate === '' || newInfo.entity.status === '') {
+    return res.json({ success: false, message: 'All fields must be filled except for Notes', status: 'Bad request' })
+  }
+  console.log(dateFormatRegex.test(newInfo.dueDate))
+
+  if (!dateFormatRegex.test(newInfo.dueDate)) {
+    return res.json({ success: false, message: 'Date is not in valid formatting', status: 'Bad request'})
+  }
+
   const access = req.cookies.accessToken;
   let updatedInfo;
 
@@ -97,6 +118,10 @@ export const deleteEntity = async (req, res) => {
   const decoded = jwt.decode(access);
   const id = decoded.id
   console.log('this is where the id should be',entityId, access, id);
+
+  if (!entityId) {
+    return res.json({ success: false, message: 'Unable to delete the entity due to missing', status: 'Bad request' })
+  }
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.json({ success: false, message: 'User not found', status: '404'});

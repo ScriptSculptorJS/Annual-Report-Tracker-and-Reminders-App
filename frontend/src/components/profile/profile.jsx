@@ -6,9 +6,11 @@ import './profile.css';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
+import Alert from 'react-bootstrap/Alert';
 import Form from 'react-bootstrap/Form';
 import Dropdown from 'react-bootstrap/Dropdown';
 import EntityTable from '../entityTable/EntityTable.jsx';
+import Header from '../header/header.jsx';
 
 function Profile() {
   const [ message, setMessage ] = useState();
@@ -23,6 +25,8 @@ function Profile() {
   const [ entityIndex, setEntityIndex ] = useState();
   const [ show, setShow ] = useState(false);
   const [ edit, setEdit ] = useState(false);
+  const [ showAlert, setShowAlert ] = useState(false);
+  const [ alertMessage, setAlertMessage ] = useState('');
 
   //Checks that the user has access by checking their tokens stored in the cookies in the backend, if not successful it navigates the user to the login page
   useEffect(() => {
@@ -46,9 +50,10 @@ function Profile() {
   const navigate = useNavigate();
   //Collects variables and methods from stores
   const { createEntity, updateEntity } = useUserStore();
-  const { updateEntities, entities } = useInfoStore();
+  const { updateEntities, entities, businessName } = useInfoStore();
   const handleShow = () => setShow(true);
-  const listRenderingArray = []
+  const listRenderingArray = [];
+  const alertArray = [];
   /*const id = location.state.id;
   const user = location.state.data;*/
   /*console.log(id)
@@ -85,38 +90,87 @@ function Profile() {
   //Closes the modal and resets the entity state
   const handleClose = () => {
     setShow(false);
-    setEntity({...entity, name: '', state: '', dueDate: '', status: '', notes: ''})
+    setEntity({...entity, name: '', state: 'Entity state', dueDate: '', status: 'Status', notes: ''})
   }
 
   //Checks if user clicked to edit an entity, if not then creates a new entity, updates the entities in the info store, and resets the entity state. Otherwise, it updates the entity, updates the entities in the info store, sets the edit state back to false, and resets the entities state
   const handleEntityAction = async () => {
+    handleLoading();
+
     if (!edit) {
       
       const updatedContent = await createEntity(entity);
-      updateEntities(updatedContent.data.entities);
-      setEntity({...entity, name: '', state: '', dueDate: '', status: '', notes: ''})
+      console.log(updatedContent);
+
+      if (!updatedContent.data) {
+        handleLoading();
+        setShowAlert(true)
+        setAlertMessage(updatedContent.message);
+
+      } else {
+        handleClose();
+        setShowAlert(false);
+        updateEntities(updatedContent.data.entities);
+        setEntity({...entity, name: '', state: 'Entity state', dueDate: '', status: 'Status', notes: ''})
+        handleLoading();
+      }
 
     } else {
 
       const updatedContent = await updateEntity(entity, entityIndex);
-      updateEntities(updatedContent.data.entities);
-      setEdit(false);
-      setEntity({...entity, name: '', state: '', dueDate: '', status: '', notes: ''})
+
+      if (!updatedContent.data) {
+        handleLoading();
+        setShowAlert(true);
+        setAlertMessage(updatedContent.message)
+      } else {
+        handleClose();
+        updateEntities(updatedContent.data.entities);
+        setShowAlert(false);
+        setEdit(false);
+        setEntity({...entity, name: '', state: 'Entity state', dueDate: '', status: 'Status', notes: ''})
+        handleLoading();
+      }
 
     }
   }
 
+  const handleLoading = () => {
+    const loadingElement = document.querySelector('.loading');
+
+    if (loadingElement.classList.contains('hidden')) {
+      loadingElement.classList.remove('hidden');
+    } else { 
+      loadingElement.classList.add('hidden');
+    }
+  }
+
+  /*const showAlert = (status, message) => {
+    console.log('we are in the show Alert function', status, message)
+    
+    alertArray.push(
+      <p variant='danger'>
+        Status: "${status}"
+        Message: "${message}"
+      </p>
+    )
+  }*/
+
   return(
     <>
+    <Header name={businessName}/>
       <Card>
         <Card.Header className='header-title'>
           Your Entities
         </Card.Header>
         <Card.Body>
           {listRenderingArray}
-          <Button onClick={() => handleShow()}> 
+          <Button className='float-end' onClick={() => handleShow()}> 
             Create Entity
           </Button>
+          <p className='loading green hidden'>
+            Loading...
+          </p>
         </Card.Body>
       </Card>
       
@@ -390,7 +444,7 @@ function Profile() {
                 onChange={e => setEntity({ ...entity, notes: e.target.value})} 
               />
             </Form.Group>
-
+            {showAlert && <Alert variant='danger'>{alertMessage}</Alert>}
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -402,8 +456,7 @@ function Profile() {
           </Button>
           <Button 
             variant="primary" 
-            onClick={() => {
-              handleClose(); 
+            onClick={() => { 
               handleEntityAction()
             }}
           >
