@@ -5,11 +5,40 @@ import './entityTable.css';
 function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity }) {
 
   const newEntitiesArray = [];
+  
   //Collects variables and methods to use later
   const { entities, updateEntities } = useInfoStore();
   const { deleteEntity } = useUserStore();
   
   //Order entities based on if it meets reminderFrequency or not
+  console.log(entities);
+  const todayDate = new Date();
+  console.log(todayDate.getMonth(), todayDate.getDate());
+  const sortByCustomDateStart = (entities, month, day, year) => {
+     entities.sort((a, b) => {
+      
+      console.log(month, day, year);
+      const aDate = new Date(a.dueDate)
+      const bDate = new Date(b.dueDate);
+      const monthA = aDate.getMonth();
+      const dayA = aDate.getDate();
+      const monthB = bDate.getMonth();
+      const dayB = bDate.getDate();
+
+      if (monthA < month || (monthA === month && dayA < day)) {
+        aDate.setFullYear(year + 1);
+      }
+
+      if (monthB < month || (monthB === month && dayB < day)) {
+        bDate.setFullYear(year + 1);
+      }
+
+      return aDate.getTime() - bDate.getTime();
+    })
+  }
+ 
+  sortByCustomDateStart(entities, todayDate.getMonth(), todayDate.getDate(), todayDate.getFullYear())
+  console.log(entities)
   
 
   //Interates through the entities array and creates HTML for each entity with specific styling based on its status
@@ -17,14 +46,14 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
     const entity = entities[i];
     const status = entity.status;
     let statusColor;
-
+    let background;
+    const reminderMessage = [];
 
     const dateFromMongo = new Date(entity.dueDate);
 
     const formattedDate = dateFromMongo.toLocaleString('en-US', {
       month: 'long',
-      day: 'numeric',
-      year: 'numeric'
+      day: 'numeric'
     })
 
     //Check what reminderFrequency is set for this entity
@@ -36,13 +65,15 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
 
       const formattedOneMonthFromNow = oneMonthFromNow.toLocaleString('en-US', {
         month: 'long',
-        day: 'numeric',
-        year: 'numeric'
+        day: 'numeric'
       })
 
       if (formattedDate === formattedOneMonthFromNow) {
-        console.log('This entity is due in 1 month', entity.status);
+        reminderMessage.push(<td className='backgroundRed font-weight-bold'>Due in 1 month</td>);
+      } else {
+        reminderMessage.push(<td></td>)
       }
+
     } else if (entity.reminderFrequency === '2 weeks before Due Date') {
       //Create date 14 days from now
       const twoWeeksFromNow = new Date();
@@ -51,12 +82,13 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
 
       const formattedTwoWeeksFromNow = twoWeeksFromNow.toLocaleString('en-US', {
         month: 'long',
-        day: 'numeric',
-        year: 'numeric'
+        day: 'numeric'
       })
 
       if (formattedDate === formattedTwoWeeksFromNow) {
-        console.log('This entity is due in 2 weeks', entity.status);
+        reminderMessage.push(<td className='backgroundRed font-weight-bold'>Due in 2 weeks</td>);
+      } else {
+        reminderMessage.push(<td></td>)
       }
     } else if (entity.reminderFrequency === '1 week before Due Date') {
       //Create date 7 days from now
@@ -66,25 +98,33 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
       
       const formattedSevenDaysFromNow = sevenDaysFromNow.toLocaleString('en-US', {
         month: 'long',
-        day: 'numeric',
-        year: 'numeric'
+        day: 'numeric'
       })
 
       if (formattedDate === formattedSevenDaysFromNow) {
-        console.log('This entity is due in 7 days', entity.status);
+        reminderMessage.push(<td className='backgroundRed font-weight-bold'>Due in 7 days</td>);
+      } else {
+        reminderMessage.push(<td></td>)
       }
+
     } else if (entity.reminderFrequency === 'On Due Date') {
       //Create date 0 days from now
       const zeroDaysFromNow = new Date();
       
       const formattedZeroDaysFromNow = zeroDaysFromNow.toLocaleString('en-US', {
         month: 'long',
-        day: 'numeric',
-        year: 'numeric'
+        day: 'numeric'
       })
 
       if (formattedDate === formattedZeroDaysFromNow) {
-        console.log('This entity is due today', entity.status);
+
+        reminderMessage.push(<td className='backgroundRed font-weight-bold'>Due today</td>);
+        
+      } else {
+
+        reminderMessage.push(<td></td>)
+        background = ''
+
       }
     }
 
@@ -110,6 +150,7 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
           <tr key={i}>
             <th scope="row" className='fw-normal'>{entity.name}</th>
             <td>{entity.state}</td>
+            {reminderMessage}
             <td>{formattedDate}</td>
             <td className={statusColor}>{status}</td>
             <td>{entity.notes}</td>
@@ -181,6 +222,7 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
         <tr>
           <th scope="col">Name</th>
           <th scope="col">State</th>
+          <th scope='col'>Reminder</th>
           <th scope="col">Due Date</th>
           <th scope="col">Status</th>
           <th scope="col">Notes</th>

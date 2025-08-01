@@ -56,7 +56,6 @@ function Profile() {
   const { updateEntities, entities, businessName } = useInfoStore();
   const handleShow = () => setShow(true);
   const listRenderingArray = [];
-  const alertArray = [];
   /*const id = location.state.id;
   const user = location.state.data;*/
   /*console.log(id)
@@ -384,7 +383,7 @@ function Profile() {
               <Form.Control 
                 as="textarea" 
                 rows={1} 
-                placeholder='Due Date: month date, year (i.e. March 21, 2026)' 
+                placeholder='Due Date: month date (i.e. March 21)' 
                 value={entity.dueDate}
                 onChange={e => setEntity({ ...entity, dueDate: e.target.value })} 
               />
