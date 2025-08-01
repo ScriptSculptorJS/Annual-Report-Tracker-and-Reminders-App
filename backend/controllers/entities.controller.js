@@ -41,9 +41,9 @@ export const createEntity = async (req, res) => {
             name: newInfo.name,
             state: newInfo.state,
             dueDate: newInfo.dueDate,
+            reminderFrequency: newInfo.reminderFrequency,
             status: newInfo.status,
-            notes: newInfo.notes,
-            userReference: newInfo.userReference
+            notes: newInfo.notes
           },
           $position: 0
       }
@@ -92,9 +92,9 @@ export const updateEntity = async (req, res) => {
         [`entities.${newInfo.index}.name`]: newInfo.entity.name,
         [`entities.${newInfo.index}.state`]: newInfo.entity.state,
         [`entities.${newInfo.index}.dueDate`]: newInfo.entity.dueDate,
+        [`entities.${newInfo.index}.reminderFrequency`]: newInfo.entity.reminderFrequency,
         [`entities.${newInfo.index}.status`]: newInfo.entity.status,
-        [`entities.${newInfo.index}.notes`]: newInfo.entity.notes,
-        [`entities.${newInfo.index}. userReference`]: newInfo.entity.userReference
+        [`entities.${newInfo.index}.notes`]: newInfo.entity.notes
       }
     }, { new: true });
     

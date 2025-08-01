@@ -8,6 +8,9 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
   //Collects variables and methods to use later
   const { entities, updateEntities } = useInfoStore();
   const { deleteEntity } = useUserStore();
+  
+  //Order entities based on if it meets reminderFrequency or not
+  
 
   //Interates through the entities array and creates HTML for each entity with specific styling based on its status
   for (let i = 0; i < entities.length; i++) {
@@ -15,12 +18,75 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
     const status = entity.status;
     let statusColor;
 
+
     const dateFromMongo = new Date(entity.dueDate);
+
     const formattedDate = dateFromMongo.toLocaleString('en-US', {
       month: 'long',
       day: 'numeric',
       year: 'numeric'
     })
+
+    //Check what reminderFrequency is set for this entity
+    if (entity.reminderFrequency === '1 month before Due Date') {
+      //Create date 1 month from now
+      const oneMonthFromNow = new Date();
+      
+      oneMonthFromNow.setMonth(oneMonthFromNow.getMonth() + 1);
+
+      const formattedOneMonthFromNow = oneMonthFromNow.toLocaleString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      })
+
+      if (formattedDate === formattedOneMonthFromNow) {
+        console.log('This entity is due in 1 month', entity.status);
+      }
+    } else if (entity.reminderFrequency === '2 weeks before Due Date') {
+      //Create date 14 days from now
+      const twoWeeksFromNow = new Date();
+      
+      twoWeeksFromNow.setDate(twoWeeksFromNow.getDate() + 14);
+
+      const formattedTwoWeeksFromNow = twoWeeksFromNow.toLocaleString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      })
+
+      if (formattedDate === formattedTwoWeeksFromNow) {
+        console.log('This entity is due in 2 weeks', entity.status);
+      }
+    } else if (entity.reminderFrequency === '1 week before Due Date') {
+      //Create date 7 days from now
+      const sevenDaysFromNow = new Date();
+      
+      sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
+      
+      const formattedSevenDaysFromNow = sevenDaysFromNow.toLocaleString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      })
+
+      if (formattedDate === formattedSevenDaysFromNow) {
+        console.log('This entity is due in 7 days', entity.status);
+      }
+    } else if (entity.reminderFrequency === 'On Due Date') {
+      //Create date 0 days from now
+      const zeroDaysFromNow = new Date();
+      
+      const formattedZeroDaysFromNow = zeroDaysFromNow.toLocaleString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      })
+
+      if (formattedDate === formattedZeroDaysFromNow) {
+        console.log('This entity is due today', entity.status);
+      }
+    }
 
     if (status === 'Active') {
       statusColor = 'green'
@@ -107,8 +173,6 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
       setEntity({...entity, name: '', state: 'Entity state', dueDate: '', status: 'Status', notes: ''})
 
     }
-
-    
   }
 
   return(

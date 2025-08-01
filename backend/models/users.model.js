@@ -13,6 +13,7 @@ const entitySchema = new mongoose.Schema({
     type: Date,
     required: true
   },
+  reminderFrequency: String,
   status: String,
   notes: String,
 })
