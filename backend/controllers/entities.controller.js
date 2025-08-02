@@ -9,7 +9,7 @@ export const createEntity = async (req, res) => {
   const user = req.body;*/
   console.log('we are in backend to create entity')
   const newInfo = req.body;
-   const dateFormatRegex = /^(January|February|March|April|May|June|July|August|September|October|November|December)\s\d{1,2}$/
+   const dateFormatRegex = /^(January|February|March|April|May|June|July|August|September|October|November|December)\s\d{1,2},\s\d{4}$/
 
   if (newInfo.name === '' || newInfo.state === '' || newInfo.dueDate === '' || newInfo.status === '') {
     return res.json({ success: false, message: 'All fields must be filled except for Notes', status: 'Bad request' })

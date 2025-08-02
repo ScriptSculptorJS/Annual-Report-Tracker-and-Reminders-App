@@ -21,3 +21,11 @@ ul {
 .backgroundRed {
   background-color: hsla(0, 100%, 50%, 0.164) !important;
 }
+
+.backgroundDarkRed {
+  background-color: hsla(0, 100%, 50%, 0.312) !important;
+}
+
+.backgroundDeepRed {
+  background-color: hsla(0, 100%, 50%, 0.531) !important;
+}

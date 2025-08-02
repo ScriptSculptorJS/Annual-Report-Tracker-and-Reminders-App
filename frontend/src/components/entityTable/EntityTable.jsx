@@ -11,13 +11,10 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
   const { deleteEntity } = useUserStore();
   
   //Order entities based on if it meets reminderFrequency or not
-  console.log(entities);
   const todayDate = new Date();
-  console.log(todayDate.getMonth(), todayDate.getDate());
   const sortByCustomDateStart = (entities, month, day, year) => {
      entities.sort((a, b) => {
       
-      console.log(month, day, year);
       const aDate = new Date(a.dueDate)
       const bDate = new Date(b.dueDate);
       const monthA = aDate.getMonth();
@@ -46,85 +43,84 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
     const entity = entities[i];
     const status = entity.status;
     let statusColor;
-    let background;
     const reminderMessage = [];
 
     const dateFromMongo = new Date(entity.dueDate);
 
+    const findDayOfYear = (date) => {
+      
+      const startOfYear = new Date(date.getFullYear(), 0, 1);
+      const diffInMilliseconds = date.getTime() - startOfYear.getTime();
+      const millisecondsPerDay = 1000 * 60 * 60 * 24;
+      const dayOfYear = Math.floor(diffInMilliseconds / millisecondsPerDay) + 1;
+      return dayOfYear;
+
+    }
+
+    const mongoDayOfYear = findDayOfYear(dateFromMongo);
+    
+    todayDate.setHours(0, 0, 0, 0);
+    const todayDayOfYear = findDayOfYear(todayDate);
+
     const formattedDate = dateFromMongo.toLocaleString('en-US', {
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
+      year: 'numeric'
     })
 
     //Check what reminderFrequency is set for this entity
     if (entity.reminderFrequency === '1 month before Due Date') {
-      //Create date 1 month from now
+
       const oneMonthFromNow = new Date();
-      
+      oneMonthFromNow.setHours(0, 0, 0, 0);
       oneMonthFromNow.setMonth(oneMonthFromNow.getMonth() + 1);
 
       const formattedOneMonthFromNow = oneMonthFromNow.toLocaleString('en-US', {
         month: 'long',
-        day: 'numeric'
+        day: 'numeric',
+        year: 'numeric'
       })
 
       if (formattedDate === formattedOneMonthFromNow) {
         reminderMessage.push(<td className='backgroundRed font-weight-bold'>Due in 1 month</td>);
+      } else if ((mongoDayOfYear - todayDayOfYear) === 0) {
+        reminderMessage.push(<td className='backgroundDeepRed font-weight-bold'>Due today!</td>);
+      } else if (0 < (mongoDayOfYear - todayDayOfYear) < 31) {
+        reminderMessage.push(<td className='backgroundDarkRed font-weight-bold'>Due in less than 1 month</td>);
       } else {
         reminderMessage.push(<td></td>)
       }
 
     } else if (entity.reminderFrequency === '2 weeks before Due Date') {
-      //Create date 14 days from now
-      const twoWeeksFromNow = new Date();
-      
-      twoWeeksFromNow.setDate(twoWeeksFromNow.getDate() + 14);
 
-      const formattedTwoWeeksFromNow = twoWeeksFromNow.toLocaleString('en-US', {
-        month: 'long',
-        day: 'numeric'
-      })
-
-      if (formattedDate === formattedTwoWeeksFromNow) {
+      if ((mongoDayOfYear - todayDayOfYear) === 14) {
         reminderMessage.push(<td className='backgroundRed font-weight-bold'>Due in 2 weeks</td>);
+      } else if ((mongoDayOfYear - todayDayOfYear) === 0) {
+        reminderMessage.push(<td className='backgroundDeepRed font-weight-bold'>Due today!</td>);
+      } else if (0 < (mongoDayOfYear - todayDayOfYear) < 14) {
+        reminderMessage.push(<td className='backgroundDarkRed font-weight-bold'>Due in less than 2 weeks</td>);
       } else {
         reminderMessage.push(<td></td>)
       }
-    } else if (entity.reminderFrequency === '1 week before Due Date') {
-      //Create date 7 days from now
-      const sevenDaysFromNow = new Date();
-      
-      sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
-      
-      const formattedSevenDaysFromNow = sevenDaysFromNow.toLocaleString('en-US', {
-        month: 'long',
-        day: 'numeric'
-      })
 
-      if (formattedDate === formattedSevenDaysFromNow) {
-        reminderMessage.push(<td className='backgroundRed font-weight-bold'>Due in 7 days</td>);
+    } else if (entity.reminderFrequency === '1 week before Due Date') {
+      
+      if ((mongoDayOfYear - todayDayOfYear) === 7) {
+        reminderMessage.push(<td className='backgroundRed font-weight-bold'>Due in 1 week</td>);
+      } else if ((mongoDayOfYear - todayDayOfYear) === 0) {
+        reminderMessage.push(<td className='backgroundDeepRed font-weight-bold'>Due today!</td>);
+      } else if (0 < (mongoDayOfYear - todayDayOfYear) < 7) {
+        reminderMessage.push(<td className='backgroundDarkRed font-weight-bold'>Due in less than 1 week</td>);
       } else {
         reminderMessage.push(<td></td>)
       }
 
     } else if (entity.reminderFrequency === 'On Due Date') {
-      //Create date 0 days from now
-      const zeroDaysFromNow = new Date();
       
-      const formattedZeroDaysFromNow = zeroDaysFromNow.toLocaleString('en-US', {
-        month: 'long',
-        day: 'numeric'
-      })
-
-      if (formattedDate === formattedZeroDaysFromNow) {
-
-        reminderMessage.push(<td className='backgroundRed font-weight-bold'>Due today</td>);
-        
+      if ((mongoDayOfYear - todayDayOfYear) === 0) {
+        reminderMessage.push(<td className='backgroundDeepRed font-weight-bold'>Due today!</td>);
       } else {
-
         reminderMessage.push(<td></td>)
-        background = ''
-
       }
     }
 

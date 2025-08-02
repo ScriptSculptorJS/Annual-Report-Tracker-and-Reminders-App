@@ -98,11 +98,11 @@ function Profile() {
   //Checks if user clicked to edit an entity, if not then creates a new entity, updates the entities in the info store, and resets the entity state. Otherwise, it updates the entity, updates the entities in the info store, sets the edit state back to false, and resets the entities state
   const handleEntityAction = async () => {
     handleLoading();
+    console.log(entity.dueDate)
 
     if (!edit) {
       
       const updatedContent = await createEntity(entity);
-      console.log(updatedContent);
 
       if (!updatedContent.data) {
         handleLoading();
@@ -383,7 +383,7 @@ function Profile() {
               <Form.Control 
                 as="textarea" 
                 rows={1} 
-                placeholder='Due Date: month date (i.e. March 21)' 
+                placeholder='Due Date: month date, year (i.e. March 21, 2025)' 
                 value={entity.dueDate}
                 onChange={e => setEntity({ ...entity, dueDate: e.target.value })} 
               />
