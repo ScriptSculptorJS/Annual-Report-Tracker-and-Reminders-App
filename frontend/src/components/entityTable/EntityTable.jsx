@@ -8,12 +8,13 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
   
   //Collects variables and methods to use later
   const { entities, updateEntities } = useInfoStore();
-  const { deleteEntity } = useUserStore();
+  const { deleteEntity, updateEntity } = useUserStore();
   
   //Order entities based on if it meets reminderFrequency or not
   const todayDate = new Date();
-  const sortByCustomDateStart = (entities, month, day, year) => {
-     entities.sort((a, b) => {
+  const updatedEntitiesArray = entities;
+  const sortByCustomDateStart = (updatedEntitiesArray, month, day, year) => {
+     updatedEntitiesArray.sort((a, b) => {
       
       const aDate = new Date(a.dueDate)
       const bDate = new Date(b.dueDate);
@@ -34,7 +35,7 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
     })
   }
  
-  sortByCustomDateStart(entities, todayDate.getMonth(), todayDate.getDate(), todayDate.getFullYear())
+  sortByCustomDateStart(updatedEntitiesArray, todayDate.getMonth(), todayDate.getDate(), todayDate.getFullYear())
   console.log(entities)
   
 
@@ -85,7 +86,7 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
         reminderMessage.push(<td className='backgroundRed font-weight-bold'>Due in 1 month</td>);
       } else if ((mongoDayOfYear - todayDayOfYear) === 0) {
         reminderMessage.push(<td className='backgroundDeepRed font-weight-bold'>Due today!</td>);
-      } else if (0 < (mongoDayOfYear - todayDayOfYear) < 31) {
+      } else if ((mongoDayOfYear - todayDayOfYear) > 0 && (mongoDayOfYear - todayDayOfYear) < 31) {
         reminderMessage.push(<td className='backgroundDarkRed font-weight-bold'>Due in less than 1 month</td>);
       } else {
         reminderMessage.push(<td></td>)
@@ -97,7 +98,7 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
         reminderMessage.push(<td className='backgroundRed font-weight-bold'>Due in 2 weeks</td>);
       } else if ((mongoDayOfYear - todayDayOfYear) === 0) {
         reminderMessage.push(<td className='backgroundDeepRed font-weight-bold'>Due today!</td>);
-      } else if (0 < (mongoDayOfYear - todayDayOfYear) < 14) {
+      } else if ((mongoDayOfYear - todayDayOfYear) > 0 && (mongoDayOfYear - todayDayOfYear) < 14) {
         reminderMessage.push(<td className='backgroundDarkRed font-weight-bold'>Due in less than 2 weeks</td>);
       } else {
         reminderMessage.push(<td></td>)
@@ -109,7 +110,7 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
         reminderMessage.push(<td className='backgroundRed font-weight-bold'>Due in 1 week</td>);
       } else if ((mongoDayOfYear - todayDayOfYear) === 0) {
         reminderMessage.push(<td className='backgroundDeepRed font-weight-bold'>Due today!</td>);
-      } else if (0 < (mongoDayOfYear - todayDayOfYear) < 7) {
+      } else if ((mongoDayOfYear - todayDayOfYear) > 0 && (mongoDayOfYear - todayDayOfYear) < 7) {
         reminderMessage.push(<td className='backgroundDarkRed font-weight-bold'>Due in less than 1 week</td>);
       } else {
         reminderMessage.push(<td></td>)

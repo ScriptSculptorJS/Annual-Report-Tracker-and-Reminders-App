@@ -92,7 +92,9 @@ function Profile() {
   //Closes the modal and resets the entity state
   const handleClose = () => {
     setShow(false);
-    setEntity({...entity, name: '', state: 'Entity state', dueDate: '', status: 'Status', notes: ''})
+    setEntity({...entity, name: '', state: 'Entity state', dueDate: '', reminderFrequency: 'Set reminder', status: 'Status', notes: ''})
+    setShowAlert(false); 
+    setAlertMessage('')
   }
 
   //Checks if user clicked to edit an entity, if not then creates a new entity, updates the entities in the info store, and resets the entity state. Otherwise, it updates the entity, updates the entities in the info store, sets the edit state back to false, and resets the entities state
@@ -113,13 +115,14 @@ function Profile() {
         handleClose();
         setShowAlert(false);
         updateEntities(updatedContent.data.entities);
-        setEntity({...entity, name: '', state: 'Entity state', dueDate: '', status: 'Status', notes: ''})
+        setEntity({...entity, name: '', state: 'Entity state', dueDate: '', reminderFrequency: 'Set reminder', status: 'Status', notes: ''})
         handleLoading();
       }
 
     } else {
 
       const updatedContent = await updateEntity(entity, entityIndex);
+      console.log('Do we see the updated year here?', updatedContent.data.entities)
 
       if (!updatedContent.data) {
         handleLoading();
@@ -130,7 +133,7 @@ function Profile() {
         updateEntities(updatedContent.data.entities);
         setShowAlert(false);
         setEdit(false);
-        setEntity({...entity, name: '', state: 'Entity state', dueDate: '', status: 'Status', notes: ''})
+        setEntity({...entity, name: '', state: 'Entity state', dueDate: '', reminderFrequency: 'Set reminder', status: 'Status', notes: ''})
         handleLoading();
       }
 
@@ -385,7 +388,8 @@ function Profile() {
                 rows={1} 
                 placeholder='Due Date: month date, year (i.e. March 21, 2025)' 
                 value={entity.dueDate}
-                onChange={e => setEntity({ ...entity, dueDate: e.target.value })} 
+                onChange={e => {setEntity({ ...entity, dueDate: e.target.value });
+                console.log(entity.dueDate)}} 
               />
             </Form.Group>
 
@@ -394,7 +398,7 @@ function Profile() {
               controlId="exampleForm.ControlTextarea1"
             >
               <Row>
-                <Col xs={3} className='me-4'>
+                <Col xs={5} className='me-4'>
                   <Dropdown 
                     onSelect={e => setEntity({...entity, reminderFrequency: e})} 
                     value={entity.reminderFrequency}
@@ -403,7 +407,7 @@ function Profile() {
                       variant='secondary' 
                       id='dropdown-basic'
                     >
-                      Set reminder
+                      {entity.reminderFrequency}
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu className='scrollable-dropdown-menu'>
