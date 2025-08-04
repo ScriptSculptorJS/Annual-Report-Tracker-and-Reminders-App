@@ -1,22 +1,23 @@
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { useUserStore } from '../../store/user.jsx';
-import { useInfoStore } from '../../store/info.ts';
-import './profile.css';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-import Modal from 'react-bootstrap/Modal';
-import Alert from 'react-bootstrap/Alert';
-import Form from 'react-bootstrap/Form';
-import Dropdown from 'react-bootstrap/Dropdown';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import EntityTable from '../entityTable/EntityTable.jsx';
-import Header from '../header/header.jsx';
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useUserStore } from '../../store/user.jsx'
+import { useInfoStore } from '../../store/info.ts'
+import './profile.css'
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
+import Modal from 'react-bootstrap/Modal'
+import Alert from 'react-bootstrap/Alert'
+import Form from 'react-bootstrap/Form'
+import Dropdown from 'react-bootstrap/Dropdown'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import EntityTable from '../entityTable/EntityTable.jsx'
+import Header from '../header/header.jsx'
 
 function Profile() {
-  const [ message, setMessage ] = useState();
-  const { checkAccess } = useUserStore();
+
+  const { checkAccess } = useUserStore()
+
   const [ entity, setEntity ] = useState({
     name: '',
     state: 'Entity state',
@@ -25,23 +26,27 @@ function Profile() {
     status: 'Status',
     notes: '',
   })
-  const [ entityIndex, setEntityIndex ] = useState();
-  const [ show, setShow ] = useState(false);
-  const [ edit, setEdit ] = useState(false);
-  const [ showAlert, setShowAlert ] = useState(false);
-  const [ alertMessage, setAlertMessage ] = useState('');
+
+  const [ entityIndex, setEntityIndex ] = useState()
+  const [ show, setShow ] = useState(false)
+  const [ edit, setEdit ] = useState(false)
+  const [ showAlert, setShowAlert ] = useState(false)
+  const [ alertMessage, setAlertMessage ] = useState('')
 
   //Checks that the user has access by checking their tokens stored in the cookies in the backend, if not successful it navigates the user to the login page
   useEffect(() => {
+
     async function checkingTokenAccess() {
-      const res = await checkAccess();
+
+      const res = await checkAccess()
       
       if (!res.valid) {
         navigate('/')
       }
+
     }
 
-    checkingTokenAccess();
+    checkingTokenAccess()
 
   })
 
@@ -49,20 +54,13 @@ function Profile() {
   //const navigate = useNavigate();
 
   //GET RID of this in the future as it is not secure, but is useful when deleting the user for the time being.
-  const location = useLocation();
-  const navigate = useNavigate();
+  const location = useLocation()
+  const navigate = useNavigate()
   //Collects variables and methods from stores
-  const { createEntity, updateEntity } = useUserStore();
-  const { updateEntities, entities, businessName } = useInfoStore();
-  const handleShow = () => setShow(true);
-  const listRenderingArray = [];
-  /*const id = location.state.id;
-  const user = location.state.data;*/
-  /*console.log(id)
-  
-  console.log(user);*/
-
-  //console.log(JSON.parse(localStorage.getItem('user')));
+  const { createEntity, updateEntity } = useUserStore()
+  const { updateEntities, entities, businessName } = useInfoStore()
+  const handleShow = () => setShow(true)
+  const listRenderingArray = []
 
   /*const logout = () => {
     navigate...
@@ -72,12 +70,15 @@ function Profile() {
 
   //Checks if the entities array is empty, if it is a message alerts the user, if not then it renders the entities in a table
   if (entities.length === 0) {
+
     listRenderingArray.push(
       <p key='empty' className='red'>
         You currently do not have any entities saved
       </p>
     ) 
+
   } else {
+
     listRenderingArray.push(
       <EntityTable 
         handleShow={handleShow} 
@@ -87,79 +88,78 @@ function Profile() {
         entity={entity} 
       />
     ) 
+
   }
 
   //Closes the modal and resets the entity state
   const handleClose = () => {
-    setShow(false);
+
+    setShow(false)
     setEntity({...entity, name: '', state: 'Entity state', dueDate: '', reminderFrequency: 'Set reminder', status: 'Status', notes: ''})
-    setShowAlert(false); 
+    setShowAlert(false)
     setAlertMessage('')
+
   }
 
   //Checks if user clicked to edit an entity, if not then creates a new entity, updates the entities in the info store, and resets the entity state. Otherwise, it updates the entity, updates the entities in the info store, sets the edit state back to false, and resets the entities state
   const handleEntityAction = async () => {
-    handleLoading();
-    console.log(entity.dueDate)
+
+    handleLoading()
 
     if (!edit) {
       
       const updatedContent = await createEntity(entity);
 
       if (!updatedContent.data) {
-        handleLoading();
+
+        handleLoading()
         setShowAlert(true)
-        setAlertMessage(updatedContent.message);
+        setAlertMessage(updatedContent.message)
 
       } else {
-        handleClose();
-        setShowAlert(false);
-        updateEntities(updatedContent.data.entities);
-        setEntity({...entity, name: '', state: 'Entity state', dueDate: '', reminderFrequency: 'Set reminder', status: 'Status', notes: ''})
-        handleLoading();
+
+        handleClose()
+        updateEntities(updatedContent.data.entities)
+        handleLoading()
+
       }
 
     } else {
 
-      const updatedContent = await updateEntity(entity, entityIndex);
-      console.log('Do we see the updated year here?', updatedContent.data.entities)
+      const updatedContent = await updateEntity(entity, entityIndex)
 
       if (!updatedContent.data) {
-        handleLoading();
-        setShowAlert(true);
+
+        handleLoading()
+        setShowAlert(true)
         setAlertMessage(updatedContent.message)
+
       } else {
-        handleClose();
-        updateEntities(updatedContent.data.entities);
-        setShowAlert(false);
-        setEdit(false);
-        setEntity({...entity, name: '', state: 'Entity state', dueDate: '', reminderFrequency: 'Set reminder', status: 'Status', notes: ''})
-        handleLoading();
+
+        handleClose()
+        updateEntities(updatedContent.data.entities)
+        setEdit(false)
+        handleLoading()
+
       }
 
     }
   }
 
   const handleLoading = () => {
-    const loadingElement = document.querySelector('.loading');
+
+    const loadingElement = document.querySelector('.loading')
 
     if (loadingElement.classList.contains('hidden')) {
-      loadingElement.classList.remove('hidden');
+
+      loadingElement.classList.remove('hidden')
+
     } else { 
-      loadingElement.classList.add('hidden');
+
+      loadingElement.classList.add('hidden')
+
     }
   }
-
-  /*const showAlert = (status, message) => {
-    console.log('we are in the show Alert function', status, message)
-    
-    alertArray.push(
-      <p variant='danger'>
-        Status: "${status}"
-        Message: "${message}"
-      </p>
-    )
-  }*/
 
   return(
     <>
@@ -389,7 +389,7 @@ function Profile() {
                 placeholder='Due Date: month date, year (i.e. March 21, 2025)' 
                 value={entity.dueDate}
                 onChange={e => {setEntity({ ...entity, dueDate: e.target.value });
-                console.log(entity.dueDate)}} 
+                }} 
               />
             </Form.Group>
 
@@ -497,9 +497,7 @@ function Profile() {
           </Button>
           <Button 
             variant="primary" 
-            onClick={() => { 
-              handleEntityAction()
-            }}
+            onClick={() => handleEntityAction()}
           >
             Save
           </Button>
@@ -507,6 +505,6 @@ function Profile() {
       </Modal>
     </>
   )
-};
+}
 
 export default Profile

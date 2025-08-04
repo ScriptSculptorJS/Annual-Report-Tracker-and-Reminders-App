@@ -1,27 +1,28 @@
-import {create} from 'zustand';
-import axios from 'axios';
+import {create} from 'zustand'
+import axios from 'axios'
 
 export const useUserStore = create((set) => ({
   users: [],
   setUsers: (users) => set({ users }),
   loginUser: async (newUser) => {
 
-    console.log(newUser.email, newUser.password, 'before fetch');
-
     // Helps to store the access and refresh tokens in the cookies
-    axios.defaults.withCredentials = true;
+    axios.defaults.withCredentials = true
 
     try {
 
-      const res = await axios.post('http://localhost:5001/api/auth', newUser);
+      const res = await axios.post('http://localhost:5001/api/auth', newUser)
 
-      const data = res.data;
-      console.log(data);
+      const data = res.data
 
       if (data.data) {
-        return { success: data.success, message: 'User created successfully', data: data.data };
+
+        return { success: data.success, message: 'User created successfully', data: data.data }
+
       } else {
-        return { success: data.success, message: data.message, status: data.status };
+
+        return { success: data.success, message: data.message, status: data.status }
+
       }
 
     } catch (err) {
@@ -35,114 +36,127 @@ export const useUserStore = create((set) => ({
   createUser: async (newUser) => {
     try {
      
-      const res = await axios.post('http://localhost:5001/api/users', newUser);
+      const res = await axios.post('http://localhost:5001/api/users', newUser)
 
-      const data = res.data;
-
-      console.log(res);
+      const data = res.data
 
       if (data.user) {
-        return { success: data.success, message: 'User created successfully', data: data.user };
+
+        return { success: data.success, message: 'User created successfully', data: data.user }
+
       } else {
-        return { success: data.success, message: data.message, status: data.status };
+
+        return { success: data.success, message: data.message, status: data.status }
+
       }
 
     } catch (err) {
 
-      console.log('Error in creating user: ', err);
+      console.log('Error in creating user: ', err)
 
     }
   },
   checkAccess: async () => {
 
-    axios.defaults.withCredentials = true;
+    axios.defaults.withCredentials = true
 
     try {
       
-      const res = await axios.get('http://localhost:5001/api/users');
+      const res = await axios.get('http://localhost:5001/api/users')
     
       if (res.data.valid) {
 
-        return { valid: true, success: true, message: res.data.message };
+        return { valid: true, success: true, message: res.data.message }
 
       } else {
 
-        return { valid: false, success: false, message: res.data.message };
+        return { valid: false, success: false, message: res.data.message }
 
       }
 
     } catch (err) {
 
-      console.log('Error collecting user data');
+      console.log('Error collecting user data')
 
     }
   }, 
   updateUser: async (entity, requestType) => {
-    axios.defaults.withCredentials = true;
+
+    axios.defaults.withCredentials = true
 
     try {
+
       const res = await axios.put('http://localhost:5001/api/users', {
         newObject: entity,
         requestType
-      });
+      })
 
-      console.log(res);
-      return res;
+      return res
+
     } catch (err) {
+
       console.log(err)
+
     }
   },
   createEntity: async (entity) => {
-    axios.defaults.withCredentials = true;
-    console.log(entity);
+
+    axios.defaults.withCredentials = true
+   
     try {
-      const res = await axios.post('http://localhost:5001/api/entities', entity);
 
-      const data = res.data;
+      const res = await axios.post('http://localhost:5001/api/entities', entity)
 
-      console.log(data);
+      const data = res.data
 
-      return { success: data.success, message: data.message, data: data.data, status: data.status };
+      return { success: data.success, message: data.message, data: data.data, status: data.status }
 
     } catch (err) {
-      console.log('What is the error:', err);
+
+      console.log('What is the error:', err)
 
       return { message: err.response.data.message, status: err.response.status }
+
     }
   },
   updateEntity: async (entity, index) => {
-    axios.defaults.withCredentials = true;
-    console.log('we are in the store for editing entity', entity, index)
+
+    axios.defaults.withCredentials = true
 
     try {
-      const res = await axios.put('http://localhost:5001/api/entities', { entity, index });
 
-      console.log(res);
-      const data = res.data;
+      const res = await axios.put('http://localhost:5001/api/entities', { entity, index })
 
-      return { success: data.success, message: data.message, data: data.data };
+      const data = res.data
+
+      return { success: data.success, message: data.message, data: data.data }
 
     } catch (err) {
+
       console.log('error message when creating entity:', err)
+
       return { message: err.response.data.message, status: err.response.status }
 
     }
   },
   deleteEntity: async (entityId) => {
-    axios.defaults.withCredentials = true;
-    console.log('we are in store to delete entity', entityId)
+
+    axios.defaults.withCredentials = true
 
     try {
-      const res = await axios.put('http://localhost:5001/api/entities/:id', {entityId});
 
-      console.log(res);
-      const data = res.data;
-      return { success: data.success, message: data.message, data: data.data, status: data.status };
+      const res = await axios.put('http://localhost:5001/api/entities/:id', {entityId})
+
+      const data = res.data
+
+      return { success: data.success, message: data.message, data: data.data, status: data.status }
 
     } catch (err) {
-      console.log('What is the error:', err);
+
+      console.log('What is the error:', err)
 
       return { message: err.response.data.message, status: err.response.status }
+
     }
   },
-}));
+}))

@@ -1,4 +1,4 @@
-import LoginSignup from '../components/login.jsx';
+import LoginSignup from '../components/login.jsx'
 
 function Login() {
 

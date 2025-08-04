@@ -1,6 +1,6 @@
-import { Routes, Route } from 'react-router-dom';
-import Login from './components/login/login.jsx';
-import Profile from './components/profile/profile.jsx';
+import { Routes, Route } from 'react-router-dom'
+import Login from './components/login/login.jsx'
+import Profile from './components/profile/profile.jsx'
 
 function App() {
 

@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useUserStore } from '../../store/user.jsx';
-import { useInfoStore } from '../../store/info.ts';
-import './login.css';
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useUserStore } from '../../store/user.jsx'
+import { useInfoStore } from '../../store/info.ts'
+import './login.css'
  
 function Login() {
 
@@ -10,73 +10,84 @@ function Login() {
     businessName: '',
     email: '',
     password: '',
-  });
-  const { loginUser, createUser } = useUserStore();
-  const { updateEntities, updateBusinessName } = useInfoStore();
+  })
 
-  const navigate = useNavigate();
+  const { loginUser, createUser } = useUserStore()
+  const { updateEntities, updateBusinessName } = useInfoStore()
+
+  const navigate = useNavigate()
 
   //Runs api request to get user, alert if any errors occurred with why it happened, if successful updates entities in info store and navigates user to their profile
   const handleUserLogin = async (e) => {
+
     e.preventDefault();
 
-    const { success, message, data, status } = await loginUser(newUser);
+    const { success, message, data, status } = await loginUser(newUser)
 
     if (!success) {
+
       alert(`
         Status: "${status}"
         Error: "${message}"`
       )
+
     } else {
-      console.log('Success:', success);
-      console.log('Message:', message);
-      console.log('User:', data);
+
+      console.log('Success:', success)
+      console.log('Message:', message)
+      console.log('User:', data)
 
       updateEntities(data.entities)
-      updateBusinessName(data.businessName);
+      updateBusinessName(data.businessName)
 
-      navigate('/profile/', { state: {data: data, id: data._id } });
+      navigate('/profile/', { state: {data: data, id: data._id } })
+
     }
-  };
+  }
 
   //Creates new user, alerts user of any errors that may have occurred in the creation with a message, if successful switches to the login form with fields filled
   const handleUserSignup = async (e) => {
-    e.preventDefault();
+
+    e.preventDefault()
     
-    const { success, message, data, status } = await createUser(newUser);
+    const { success, message, data, status } = await createUser(newUser)
 
     if (!data) {
+
       alert(`
         Status: "${status}"
         Error: "${message}"`
       )
-    } else {
-      Switch();
 
-      console.log('Success:', success);
-      console.log('Message:', message);
+    } else {
+
+      Switch()
+
+      console.log('Success:', success)
+      console.log('Message:', message)
       console.log('User:', data)
+
     }
   }
 
   //Switches from login form to signup form and vice versa
   function Switch() {
 
-    const loginCardElement = document.querySelector('.js-login-card');
+    const loginCardElement = document.querySelector('.js-login-card')
 
-    const signupCardElement = document.querySelector('.js-signup-card');
+    const signupCardElement = document.querySelector('.js-signup-card')
 
     if (signupCardElement.classList.contains('hidden')) {
 
-      loginCardElement.classList.add('hidden');
+      loginCardElement.classList.add('hidden')
 
-      signupCardElement.classList.remove('hidden');
+      signupCardElement.classList.remove('hidden')
 
     } else if (loginCardElement.classList.contains('hidden')) {
 
-      signupCardElement.classList.add('hidden');
+      signupCardElement.classList.add('hidden')
 
-      loginCardElement.classList.remove('hidden');
+      loginCardElement.classList.remove('hidden')
 
     }
   }
