@@ -29,7 +29,8 @@ export const createEntity = async (req, res) => {
 
   }
 
-  if (newInfo.name === '' || newInfo.state === '' || newInfo.dueDate === '' || newInfo.status === '') {
+  if (newInfo.name === '' || newInfo.state === 'Entity state' || newInfo.dueDate === '' || newInfo.reminderFrequency === 'Set reminder' || newInfo.status === 'Status') {
+    console.log(`don't have all info`)
 
     return res.json({ success: false, message: 'All fields must be filled except for Notes', status: 'Bad request' })
 
@@ -121,7 +122,7 @@ export const updateEntity = async (req, res) => {
     
   }
 
-  if (newInfo.entity.name === '' || newInfo.entity.state === '' || newInfo.entity.dueDate === '' || newInfo.entity.status === '') {
+  if (newInfo.entity.name === '' || newInfo.entity.state === 'Entity state' || newInfo.entity.dueDate === '' || newInfo.reminderFrequency === 'Set reminder' || newInfo.entity.status === 'Status') {
 
     return res.json({ success: false, message: 'All fields must be filled except for Notes', status: 'Bad request' })
 
