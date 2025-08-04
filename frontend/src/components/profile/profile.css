@@ -1,5 +1,6 @@
 .card-body {
   padding: 25px;
+  overflow-x: auto;
 }
 
 .header-title {

@@ -168,7 +168,7 @@ function Profile() {
         <Card.Header className='header-title'>
           Your Entities
         </Card.Header>
-        <Card.Body>
+        <Card.Body className='table-responsive'>
           {listRenderingArray}
           <Button className='float-end' onClick={() => handleShow()}> 
             Create Entity
