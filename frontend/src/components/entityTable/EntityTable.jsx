@@ -37,15 +37,16 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
  
   sortByCustomDateStart(updatedEntitiesArray, todayDate.getMonth(), todayDate.getDate(), todayDate.getFullYear())
 
-  //Interates through the entities array and creates HTML for each entity with specific styling based on its status
+  //Interates through the entities array and creates HTML for each entity
   for (let i = 0; i < entities.length; i++) {
     const entity = entities[i]
-    const { status, name, state, notes, reminderFrequency, dueDate } = entity
+    const { status, name, state, notes, reminderFrequency, dueDate, _id } = entity
     let statusColor
     const reminderMessage = []
 
     const dateFromMongo = new Date(dueDate)
 
+    //Return the date as a day of the year
     const findDayOfYear = (date) => {
       
       const startOfYear = new Date(date.getFullYear(), 0, 1)
@@ -68,7 +69,7 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
       year: 'numeric'
     })
 
-    //Check what reminderFrequency is set for this entity
+    //Check what reminderFrequency is set for this entity and render a reminder message if date matches criteria
     if (reminderFrequency === '1 month before Due Date') {
 
       const oneMonthFromNow = new Date()
@@ -152,6 +153,7 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
       }
     }
 
+    //Adds a class to add color to status string
     if (status === 'Active') {
       statusColor = 'green'
     } else if (status === 'Good Standing') {
@@ -170,19 +172,24 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
       statusColor = 'lightGray'
     }
 
+    //FIGURE OUT WHY GETTING KEY ERROR MESSAGE FOR EACH CHILD IN A LIST LINE 175
+    
+    //Creates HTML elements for each entity property's value
     newEntitiesArray.push(
-          <tr key={i}>
-            <th scope="row" className='fw-normal'>{name}</th>
-            <td>{state}</td>
+          <tr key={_id}>
+            <th key={`${name}-${_id}`} scope="row" className='fw-normal'>{name}</th>
+            <td key={`${state}-${_id}`}>{state}</td>
             {reminderMessage}
-            <td>{formattedDate}</td>
-            <td className={statusColor}>{status}</td>
-            <td>{notes}</td>
-            <td className='options' onClick={() => handleShowList(i)}>
+            <td key={`${formattedDate}-${_id}`}>{formattedDate}</td>
+            <td key={`${status}-${_id}`} className={statusColor}>{status}</td>
+            <td key={`notes-${_id}`}>{notes}</td>
+            <td key={`options-${_id}`} className='options' onClick={() => handleShowList(i)}>
               &#8942;
-              <div className='entityOptions hidden' id={i}>
-                <ul>
-                  <li onClick={() => {
+              <div 
+              key={`listContainer-${_id}`}
+              className='entityOptions hidden' id={i}>
+                <ul key={`list-${_id}`}>
+                  <li key={`edit-${_id}`} onClick={() => {
                     handleShow(); 
                     setEdit(true); 
                     setEntityIndex(i); 
@@ -190,7 +197,8 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
                   }}>
                     Edit
                   </li>
-                  <li className='delete' onClick={() => {deleteEntityObject(entity._id);}}>
+                  <li
+                  key={`delete-${_id}`} className='delete' onClick={() => {deleteEntityObject(entity._id);}}>
                     Delete
                   </li>
                 </ul>
@@ -199,6 +207,9 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
           </tr>
     )
   }
+
+  //All list items and their children have unique keys so not sure why getting the error message
+  console.log('what do we have for the keys here', newEntitiesArray)
 
   //Checks if entities array is empty and renders message to user that they do not have entities, or renders a table consisting of their entities
   const handleShowList = (i) => {

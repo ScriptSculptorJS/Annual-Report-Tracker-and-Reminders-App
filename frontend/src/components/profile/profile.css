@@ -1,17 +1,28 @@
+.card {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
 .card-body {
   padding: 25px;
   overflow-x: auto;
 }
 
 .header-title {
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 20px;
   text-align: center;
+  background-color: #00065d;
+  color: #ffffff;
 }
 
-.table {
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+.dropdown {
+  background-color: white;
+  color: #212529be;
+  border-color: #dee2e6;border-radius: 3px;
 }
+
+/*.table {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}*/
 
 .green {
   color: #28a745 !important;
@@ -59,4 +70,33 @@
 .scrollable-dropdown-menu {
   max-height: 200px;
   overflow-y: scroll;
+}
+
+.createButton,
+.saveButton {
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-size: 16px;
+  /*background-color: #2a9d8f;*/
+  background-color: #00065d;
+  border: none;
+  color: white;
+}
+
+.createButton:hover,
+.saveButton:hover {
+  background-color: #00cdc8;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 1px 4px;
+}
+
+.closeButton {
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.closeButton:hover {
+  background-color: #009a96;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 1px 4px;
 }

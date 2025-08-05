@@ -119,13 +119,13 @@ export const useUserStore = create((set) => ({
 
     }
   },
-  updateEntity: async (entity, index) => {
+  updateEntity: async (entity, index, completed) => {
 
     axios.defaults.withCredentials = true
 
     try {
 
-      const res = await axios.put('http://localhost:5001/api/entities', { entity, index })
+      const res = await axios.put('http://localhost:5001/api/entities', { entity, index, completed })
 
       const data = res.data
 

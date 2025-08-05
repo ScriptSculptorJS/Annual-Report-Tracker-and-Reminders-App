@@ -146,6 +146,7 @@ function Profile() {
     }
   }
 
+  //Adds loading message in case api calls take longer than expected
   const handleLoading = () => {
 
     const loadingElement = document.querySelector('.loading')
@@ -164,345 +165,351 @@ function Profile() {
   return(
     <>
     <Header name={businessName}/>
-      <Card>
-        <Card.Header className='header-title'>
-          Your Entities
-        </Card.Header>
-        <Card.Body className='table-responsive'>
-          {listRenderingArray}
-          <Button className='float-end' onClick={() => handleShow()}> 
-            Create Entity
-          </Button>
-          <p className='loading green hidden'>
-            Loading...
-          </p>
-        </Card.Body>
-      </Card>
+
+    <Card>
+      <Card.Header className='header-title'>
+        Your Entities
+      </Card.Header>
+      <Card.Body className='table-responsive'>
+        {listRenderingArray}
+        <Button className='float-end createButton' onClick={() => handleShow()}> 
+          Create Entity
+        </Button>
+        <p className='loading green hidden'>
+          Loading...
+        </p>
+      </Card.Body>
+    </Card>
       
-      <Modal 
-        show={show}  
-        onHide={() => handleClose()}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>
-            Your entity
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group 
-              className="mb-3" 
-              controlId="exampleForm.ControlInput1"
-            >
-              <Row>
-                <Col xs={12} sm={8}>
-                  <Form.Control
-                    type="name"
-                    value={entity.name}
-                    onChange={e => {setEntity({ ...entity, name: e.target.value })}}
-                    placeholder='Entity name'
-                    autoFocus
-                  />
-                </Col>
+    <Modal 
+      show={show}  
+      onHide={() => handleClose()}
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>
+          Your entity
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form>
+          <Form.Group 
+            className="mb-3" 
+            controlId="exampleForm.ControlInput1"
+          >
+            <Row>
+              <Col xs={12} sm={8}>
+                <Form.Control
+                  type="name"
+                  value={entity.name}
+                  onChange={e => {setEntity({ ...entity, name: e.target.value })}}
+                  placeholder='Entity name'
+                  autoFocus
+                />
+              </Col>
 
-                <Col sm={3}>
-                  <Dropdown 
-                    onSelect={e => setEntity({...entity, state: e })} 
-                    rows={3} 
-                    value={entity.state}
+              <Col sm={3}>
+                <Dropdown 
+                  onSelect={e => setEntity({...entity, state: e })} 
+                  rows={3} 
+                  value={entity.state}
+                >
+                  <Dropdown.Toggle
+                    className='dropdown' 
+                    variant='secondary' 
+                    id='dropdown-basic'
                   >
-                    <Dropdown.Toggle 
-                      variant='secondary' 
-                      id='dropdown-basic'
-                    >
-                      {entity.state}
-                    </Dropdown.Toggle>
+                    {entity.state}
+                  </Dropdown.Toggle>
 
-                    <Dropdown.Menu className='scrollable-dropdown-menu'>
-                      <Dropdown.Item eventKey='Alabama'>
-                        Alabama
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Alaska'>
-                        Alaska
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Arizona'>
-                        Arizona
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Arkansas'>
-                        Arkansas
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='California'>
-                        California
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Colorado'>
-                        Colorado
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Connecticut'>
-                        Connecticut
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Delaware'>
-                        Delaware
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='District of Columbia'>
-                        District of Columbia
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Florida'>
-                        Florida
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Georgia'>
-                        Georgia
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Hawaii'>
-                        Hawaii
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Idaho'>
-                        Idaho
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Illinois'>
-                        Illinois
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Indiana'>
-                        Indiana
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Iowa'>
-                        Iowa
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Kansas'>
-                        Kansas
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Kentucky'>
-                        Kentucky
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Louisiana'>
-                        Louisiana
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Maine'>
-                        Maine
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Maryland'>
-                        Maryland
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Massachusetts'>
-                        Massachusetts
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Michigan'>
-                        Michigan
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Minnesota'>
-                        Minnesota
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Mississippi'>
-                        Mississippi
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Missouri'>
-                        Missouri
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Montana'>
-                        Montana
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Nebraska'>
-                        Nebraska
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Nevada'>
-                        Nevada
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='New Hampshire'>
-                        New Hampshire
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='New Jersey'>
-                        New Jersey
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='New Mexico'>
-                        New Mexico
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='New York'>
-                        New York
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='North Carolina'>
-                        North Carolina
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='North Dakota'>
-                        North Dakota
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Ohio'>
-                        Ohio
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Oklahoma'>
-                        Oklahoma
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Oregon'>
-                        Oregon
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Pennsylvania'>
-                        Pennsylvania
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Rhode Island'>
-                        Rhode Island
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='South Carolina'>
-                        South Carolina
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='South Dakota'>
-                        South Dakota
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Tennessee'>
-                        Tennessee
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Texas'>
-                        Texas
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Utah'>
-                        Utah
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Vermont'>
-                        Vermont
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Virginia'>
-                        Virginia
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Washington'>
-                        Washington
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='West Virginia'>
-                        West Virginia
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Wisconsin'>
-                        Wisconsin
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Wyoming'>
-                        Wyoming
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Col>
-              </Row>
-              
-            </Form.Group>
+                  <Dropdown.Menu className='scrollable-dropdown-menu'>
+                    <Dropdown.Item eventKey='Alabama'>
+                      Alabama
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Alaska'>
+                      Alaska
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Arizona'>
+                      Arizona
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Arkansas'>
+                      Arkansas
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='California'>
+                      California
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Colorado'>
+                      Colorado
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Connecticut'>
+                      Connecticut
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Delaware'>
+                      Delaware
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='District of Columbia'>
+                      District of Columbia
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Florida'>
+                      Florida
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Georgia'>
+                      Georgia
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Hawaii'>
+                      Hawaii
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Idaho'>
+                      Idaho
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Illinois'>
+                      Illinois
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Indiana'>
+                      Indiana
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Iowa'>
+                      Iowa
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Kansas'>
+                      Kansas
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Kentucky'>
+                      Kentucky
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Louisiana'>
+                      Louisiana
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Maine'>
+                      Maine
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Maryland'>
+                      Maryland
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Massachusetts'>
+                      Massachusetts
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Michigan'>
+                      Michigan
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Minnesota'>
+                      Minnesota
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Mississippi'>
+                      Mississippi
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Missouri'>
+                      Missouri
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Montana'>
+                      Montana
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Nebraska'>
+                      Nebraska
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Nevada'>
+                      Nevada
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='New Hampshire'>
+                      New Hampshire
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='New Jersey'>
+                      New Jersey
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='New Mexico'>
+                      New Mexico
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='New York'>
+                      New York
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='North Carolina'>
+                      North Carolina
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='North Dakota'>
+                      North Dakota
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Ohio'>
+                      Ohio
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Oklahoma'>
+                      Oklahoma
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Oregon'>
+                      Oregon
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Pennsylvania'>
+                      Pennsylvania
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Rhode Island'>
+                      Rhode Island
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='South Carolina'>
+                      South Carolina
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='South Dakota'>
+                      South Dakota
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Tennessee'>
+                      Tennessee
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Texas'>
+                      Texas
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Utah'>
+                      Utah
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Vermont'>
+                      Vermont
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Virginia'>
+                      Virginia
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Washington'>
+                      Washington
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='West Virginia'>
+                      West Virginia
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Wisconsin'>
+                      Wisconsin
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Wyoming'>
+                      Wyoming
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Col>
+            </Row>
             
-            <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlTextarea1"
-            >
-              <Form.Control 
-                as="textarea" 
-                rows={1} 
-                placeholder='Due Date: month date, year (i.e. March 21, 2025)' 
-                value={entity.dueDate}
-                onChange={e => {setEntity({ ...entity, dueDate: e.target.value });
-                }} 
-              />
-            </Form.Group>
-
-            <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlTextarea1"
-            >
-              <Row>
-                <Col xs={5} className='me-4'>
-                  <Dropdown 
-                    onSelect={e => setEntity({...entity, reminderFrequency: e})} 
-                    value={entity.reminderFrequency}
-                  >
-                    <Dropdown.Toggle 
-                      variant='secondary' 
-                      id='dropdown-basic'
-                    >
-                      {entity.reminderFrequency}
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu className='scrollable-dropdown-menu'>
-                      <Dropdown.Item eventKey='1 month before Due Date'>
-                        1 month before Due Date
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='2 weeks before Due Date'>
-                        2 weeks before Due Date
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='1 week before Due Date'>
-                        1 week before Due Date
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='On Due Date'>
-                        On Due Date
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Col>
-
-                <Col xs={3}>
-                  <Dropdown 
-                    onSelect={e => setEntity({...entity, status: e})} 
-                    value={entity.status}
-                  >
-                    <Dropdown.Toggle 
-                      variant='secondary' 
-                      id='dropdown-basic'
-                    >
-                      {entity.status}
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu className='scrollable-dropdown-menu'>
-                      <Dropdown.Item eventKey='Active'>
-                        Active
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Inactive'>
-                        Inactive
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Pending'>
-                        Pending
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Good Standing'>
-                        Good Standing
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Not in Good Standing'>
-                        Not in Good Standing
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Dissolved'>
-                        Dissolved
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Suspended'>
-                        Suspended
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey='Revoked'>
-                        Revoked
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Col>
-              </Row>
-              
-
-              
-            </Form.Group>
-
-            <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlTextarea1"
-            >
-              <Form.Control 
-                as="textarea" 
-                rows={3} 
-                value={entity.notes}
-                placeholder='Notes'
-                onChange={e => setEntity({ ...entity, notes: e.target.value})} 
-              />
-            </Form.Group>
-            {showAlert && <Alert variant='danger'>{alertMessage}</Alert>}
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button 
-            variant="secondary" 
-            onClick={() => handleClose()}
+          </Form.Group>
+          
+          <Form.Group
+            className="mb-3"
+            controlId="exampleForm.ControlTextarea1"
           >
-            Close
-          </Button>
-          <Button 
-            variant="primary" 
-            onClick={() => handleEntityAction()}
+            <Form.Control 
+              as="textarea" 
+              rows={1} 
+              placeholder='Due Date: month date, year (i.e. March 21, 2025)' 
+              value={entity.dueDate}
+              onChange={e => {setEntity({ ...entity, dueDate: e.target.value });
+              }} 
+            />
+          </Form.Group>
+
+          <Form.Group
+            className="mb-3"
+            controlId="exampleForm.ControlTextarea1"
           >
-            Save
-          </Button>
-        </Modal.Footer>
-      </Modal>
+            <Row>
+              <Col xs={5} className='me-4'>
+                <Dropdown 
+                  onSelect={e => setEntity({...entity, reminderFrequency: e})} 
+                  value={entity.reminderFrequency}
+                >
+                  <Dropdown.Toggle
+                    className='dropdown' 
+                    variant='secondary' 
+                    id='dropdown-basic'
+                  >
+                    {entity.reminderFrequency}
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className='scrollable-dropdown-menu'>
+                    <Dropdown.Item eventKey='1 month before Due Date'>
+                      1 month before Due Date
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='2 weeks before Due Date'>
+                      2 weeks before Due Date
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='1 week before Due Date'>
+                      1 week before Due Date
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='On Due Date'>
+                      On Due Date
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Col>
+
+              <Col xs={3}>
+                <Dropdown 
+                  onSelect={e => setEntity({...entity, status: e})} 
+                  value={entity.status}
+                >
+                  <Dropdown.Toggle
+                    className='dropdown' 
+                    variant='secondary' 
+                    id='dropdown-basic'
+                  >
+                    {entity.status}
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className='scrollable-dropdown-menu'>
+                    <Dropdown.Item eventKey='Active'>
+                      Active
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Inactive'>
+                      Inactive
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Pending'>
+                      Pending
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Good Standing'>
+                      Good Standing
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Not in Good Standing'>
+                      Not in Good Standing
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Dissolved'>
+                      Dissolved
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Suspended'>
+                      Suspended
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey='Revoked'>
+                      Revoked
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Col>
+            </Row>
+            
+
+            
+          </Form.Group>
+
+          <Form.Group
+            className="mb-3"
+            controlId="exampleForm.ControlTextarea1"
+          >
+            <Form.Control 
+              as="textarea" 
+              rows={3} 
+              value={entity.notes}
+              placeholder='Notes'
+              onChange={e => setEntity({ ...entity, notes: e.target.value})} 
+            />
+          </Form.Group>
+          {showAlert && <Alert variant='danger'>{alertMessage}</Alert>}
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button
+        className='closeButton' 
+          variant="secondary" 
+          onClick={() => handleClose()}
+        >
+          Close
+        </Button>
+        <Button 
+        className='saveButton'
+          variant="primary" 
+          onClick={() => handleEntityAction()}
+        >
+          Save
+        </Button>
+      </Modal.Footer>
+    </Modal>
     </>
   )
 }

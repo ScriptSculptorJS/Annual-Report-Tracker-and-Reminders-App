@@ -4,7 +4,7 @@ function Header({ name }) {
 
   return(
     <div className='header'>
-      <h1>Welcome {name}!</h1>
+      <h1 className='font-weight-normal'>Welcome {name}!</h1>
     </div>
   )
 }

@@ -30,7 +30,6 @@ export const createEntity = async (req, res) => {
   }
 
   if (newInfo.name === '' || newInfo.state === 'Entity state' || newInfo.dueDate === '' || newInfo.reminderFrequency === 'Set reminder' || newInfo.status === 'Status') {
-    console.log(`don't have all info`)
 
     return res.json({ success: false, message: 'All fields must be filled except for Notes', status: 'Bad request' })
 

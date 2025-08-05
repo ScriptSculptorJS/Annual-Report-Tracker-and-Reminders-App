@@ -9,13 +9,21 @@
   background-color: white;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
   border-radius: 3px;
-  padding: 3px 5px;
 }
 
 ul {
   list-style-type: none;
   padding: 0px;
   margin: 0px;
+}
+
+ul li {
+  padding: 3px 5px;
+}
+
+ul li:hover {
+  background-color: rgba(128, 128, 128, 0.065);
+  border-radius: 3px;
 }
 
 .backgroundRed {
