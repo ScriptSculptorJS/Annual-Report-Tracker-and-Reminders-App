@@ -12,6 +12,36 @@
   text-align: center;
   background-color: #00065d;
   color: #ffffff;
+  font-weight: bold;
+}
+
+.empty-entities {
+  text-align: center;
+}
+
+.underline {
+  margin-bottom: 5px;
+  text-decoration: underline;
+}
+
+.action {
+  font-weight: 500;
+  font-size: 18px;
+  margin-bottom: 25px;
+}
+
+.list-item {
+  margin: 0px;
+  padding: 0px;
+}
+
+.list-item span {
+  font-weight: 500;
+}
+
+.note {
+  font-size: 14px;
+  font-style: italic;
 }
 
 .dropdown {

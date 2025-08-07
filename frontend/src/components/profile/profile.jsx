@@ -72,9 +72,37 @@ function Profile() {
   if (entities.length === 0) {
 
     listRenderingArray.push(
-      <p key='empty' className='red'>
-        You currently do not have any entities saved
-      </p>
+      <div>
+        <p className='empty-entities'>
+          You currently do not have any entities saved.
+        </p>
+        <p className='empty-entities action'>
+          Start creating your first entity by clicking the button below.
+        </p>
+        <hr></hr>
+        <p className='empty-entities underline'>
+          WHAT IS AN ENTITY?
+        </p>
+        <p className='empty-entities'>
+          An entity is a registered business (e.g., LLC, Corporation, Nonprofit) that has to file annual reports or related documents with the state government to remain in good legal standing.
+        </p>
+        <p className='empty-entities underline'>
+          THESE COULD BE:
+        </p>
+        <p className='empty-entities list-item'>
+        &bull; <span>Acme LLC</span> (a Washington-based LLC)
+        </p>
+        <p className='empty-entities list-item'>
+        &bull; <span>Sunflower Bakery Inc.</span> (a Delaware Corporation)
+        </p>
+        <p className='empty-entities list-item'>
+        &bull; <span>Green Earth Nonprofit</span> (a 501(c)(3) organization in Oregon)
+
+        </p>
+        <p className='empty-entities note'>
+          Each of these would be entered as a separate entity record in the app.
+        </p>
+      </div>
     ) 
 
   } else {
