@@ -29,8 +29,12 @@ const createRefreshToken = (id) => {
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
+  console.log(req.body);
+
   try {
     if (email === '' || password === '') {
+
+      console.log('why are we here?')
 
       res.json({ 
         status: 'Bad Request',
@@ -123,18 +127,26 @@ export const logout = (req, res) => {
 
   const cookies = req.cookies
 
-  if (!cookies?.jwt) {
+  console.log('logging out')
+
+  if (!cookies?.refreshToken) {
 
     return res.sendStatus(204)
 
   }
 
-  res.clearCookie('jwt', {
+  res.clearCookie('refreshToken', {
     httpOnly: true,
     sameSite: 'None',
     secure: true,
   })
 
-  res.json({ message: 'Cookie cleared' })
+  res.clearCookie('accessToken', {
+    httpOnly: true,
+    sameSite: 'None',
+    secure: true,
+  })
+
+  res.json({ loggedOut: true, message: 'Cookies cleared' })
 
 }

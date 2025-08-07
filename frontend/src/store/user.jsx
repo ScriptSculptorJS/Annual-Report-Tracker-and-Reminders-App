@@ -11,6 +11,8 @@ export const useUserStore = create((set) => ({
 
     try {
 
+      console.log(newUser)
+
       const res = await axios.post('http://localhost:5001/api/auth', newUser)
 
       const data = res.data
@@ -159,4 +161,19 @@ export const useUserStore = create((set) => ({
 
     }
   },
+  logOutUser: async () => {
+
+    axios.defaults.withCredentials = true
+
+    try {
+        const res = await axios.post('http://localhost:5001/api/auth/logout')
+        console.log(res)
+
+        return {loggedOut: res.data.loggedOut}
+
+    } catch (err) {
+
+      console.log('What is the error:', err)
+    }
+  }
 }))

@@ -2,3 +2,22 @@
   margin-bottom: 25px;
   text-align: center;
 }
+
+.logout-container {
+  margin-top: 0px;
+  padding-top: 0px;
+  margin-bottom: 20px;
+  display: flex;
+}
+
+.logout-container span {
+  margin-left: auto;
+  /*color: rgb(189, 188, 188);*/
+  color: #00cdc8;
+  font-weight: bold;
+}
+
+.logout-container span:hover {
+  cursor: pointer;
+  color: #009a96;
+}

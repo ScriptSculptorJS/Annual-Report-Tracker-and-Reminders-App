@@ -24,6 +24,8 @@ function Login() {
   //Runs api request to get user, alert if any errors occurred with why it happened, if successful updates entities in info store and navigates user to their profile
   const handleUserLogin = async (e) => {
 
+    console.log(newUser);
+
     const { success, message, data, status } = await loginUser(newUser)
 
     if (!success) {
@@ -83,21 +85,6 @@ function Login() {
 
     }
   }
-
-  //This will allow a user to hit the enter key again once they were sent back to the login page after creating an account so they can quickly login without clicking the button
-  document.addEventListener('keydown', function(e) {
-
-    if (e.key === 'Enter' && loginCardElement.classList.contains('hidden')) {
-
-      handleUserSignup()
-
-    } else if (e.key === 'Enter' && signupCardElement.classList.contains('hidden')) {
-
-      handleUserLogin()
-
-    }
-    
-  })
 
   //Switches from login form to signup form and vice versa
   function Switch() {
@@ -189,8 +176,8 @@ function Login() {
             name='password'
             className='password-input'
             value={newUser.password}
-            onChange={e => setNewUser({ ...newUser, password: e.target.value})} 
-            onKeyDown={handleKeyDown}
+            onChange={e => setNewUser({ ...newUser, password: e.target.value})}
+            onKeyDown={handleKeyDown} 
           />
 
           <button 

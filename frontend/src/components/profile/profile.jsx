@@ -50,23 +50,12 @@ function Profile() {
 
   })
 
-  //const signOut = useSignOut();
-  //const navigate = useNavigate();
-
-  //GET RID of this in the future as it is not secure, but is useful when deleting the user for the time being.
-  const location = useLocation()
   const navigate = useNavigate()
   //Collects variables and methods from stores
   const { createEntity, updateEntity } = useUserStore()
   const { updateEntities, entities, businessName } = useInfoStore()
   const handleShow = () => setShow(true)
   const listRenderingArray = []
-
-  /*const logout = () => {
-    navigate...
-  }*/
-
-  // When have a logout button use logout function
 
   //Checks if the entities array is empty, if it is a message alerts the user, if not then it renders the entities in a table
   if (entities.length === 0) {
