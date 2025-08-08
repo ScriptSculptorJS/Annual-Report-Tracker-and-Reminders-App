@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 5001
 app.use(express.json()) // allows us to accept json data in req.body
 
 const corsOptions = {
-  origin: ['http://localhost:5173'],
+  origin: ['https://annual-report-tracker-and-reminders-app-2.onrender.com/'],
   credentials: true,
 }
 app.use(cors(corsOptions))
