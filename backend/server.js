@@ -1,6 +1,8 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
+import path from 'path'
+
 import cookieParser from 'cookie-parser'
 import { connectDB } from './config/db.js'
 import userRoutes from './routes/user.route.js'
@@ -15,9 +17,10 @@ const PORT = process.env.PORT || 5001
 
 
 app.use(express.json()) // allows us to accept json data in req.body
+app.use(express.static(path.join(__dirname, 'public')))
 
 const corsOptions = {
-  origin: ['https://annual-report-tracker-and-reminders-app-2.onrender.com/'],
+  origin: ['https://annual-report-tracker-and-reminders-app-2.onrender.com'],
   credentials: true,
 }
 app.use(cors(corsOptions))
