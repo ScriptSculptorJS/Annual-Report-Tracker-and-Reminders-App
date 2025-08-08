@@ -1,5 +1,6 @@
 import {create} from 'zustand'
 import axios from 'axios'
+import dotenv from 'dotenv'
 
 export const useUserStore = create((set) => ({
   users: [],
@@ -13,7 +14,7 @@ export const useUserStore = create((set) => ({
 
       console.log(newUser)
 
-      const res = await axios.post('http://localhost:5001/api/auth', newUser)
+      const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth`, newUser)
 
       const data = res.data
 
@@ -38,7 +39,7 @@ export const useUserStore = create((set) => ({
   createUser: async (newUser) => {
     try {
      
-      const res = await axios.post('http://localhost:5001/api/users', newUser)
+      const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users`, newUser)
 
       const data = res.data
 
@@ -64,7 +65,7 @@ export const useUserStore = create((set) => ({
 
     try {
       
-      const res = await axios.get('http://localhost:5001/api/users')
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/users`)
     
       if (res.data.valid) {
 
@@ -88,7 +89,7 @@ export const useUserStore = create((set) => ({
 
     try {
 
-      const res = await axios.put('http://localhost:5001/api/users', {
+      const res = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/users`, {
         newObject: entity,
         requestType
       })
@@ -107,7 +108,7 @@ export const useUserStore = create((set) => ({
    
     try {
 
-      const res = await axios.post('http://localhost:5001/api/entities', entity)
+      const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/entities`, entity)
 
       const data = res.data
 
@@ -127,7 +128,7 @@ export const useUserStore = create((set) => ({
 
     try {
 
-      const res = await axios.put('http://localhost:5001/api/entities', { entity, index, completed })
+      const res = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/entities`, { entity, index, completed })
 
       const data = res.data
 
@@ -147,7 +148,7 @@ export const useUserStore = create((set) => ({
 
     try {
 
-      const res = await axios.put('http://localhost:5001/api/entities/:id', {entityId})
+      const res = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/entities/:id`, {entityId})
 
       const data = res.data
 
@@ -166,7 +167,7 @@ export const useUserStore = create((set) => ({
     axios.defaults.withCredentials = true
 
     try {
-        const res = await axios.post('http://localhost:5001/api/auth/logout')
+        const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/logout`)
         console.log(res)
 
         return {loggedOut: res.data.loggedOut}
