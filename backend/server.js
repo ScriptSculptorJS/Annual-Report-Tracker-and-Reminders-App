@@ -2,7 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import path from 'path'
-
+import { fileURLToPath } from 'url'
 import cookieParser from 'cookie-parser'
 import { connectDB } from './config/db.js'
 import userRoutes from './routes/user.route.js'
@@ -15,15 +15,24 @@ const app = express()
 app.use(cookieParser())
 const PORT = process.env.PORT || 5001
 
+const _filename = fileURLToPath(import.meta.url)
+const _dirname = path.dirname(_filename)
 
 app.use(express.json()) // allows us to accept json data in req.body
-app.use(express.static(path.join(__dirname, '..', 'frontend')))
 
 const corsOptions = {
   origin: ['https://annual-report-tracker-and-reminders-app-2.onrender.com'],
   credentials: true,
 }
 app.use(cors(corsOptions))
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(_dirname, '..', 'client', 'build')))
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(_dirname, '..', 'client', 'build', 'index.html'))
+  })
+}
 
 app.use('/api/users', userRoutes)
 app.use('/api/entities', entitiesRoutes)
