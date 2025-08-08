@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 5001
 
 
 app.use(express.json()) // allows us to accept json data in req.body
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, '..', 'frontend')))
 
 const corsOptions = {
   origin: ['https://annual-report-tracker-and-reminders-app-2.onrender.com'],
