@@ -29,7 +29,7 @@ app.use(cors(corsOptions))
 app.use(express.static(path.join(_dirname, '..', 'frontend', 'build')))
 
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(_dirname, '..', 'frontend', 'build', 'index.html'))
+  res.sendFile(path.join(_dirname, '..', 'frontend', 'build', 'index.html'))
 })
 
 app.use('/api/users', userRoutes)
