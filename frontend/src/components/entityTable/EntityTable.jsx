@@ -2,7 +2,7 @@ import { useInfoStore } from '../../store/info.ts'
 import { useUserStore } from '../../store/user.jsx'
 import './entityTable.css'
 
-function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity }) {
+function EntityTable({ handleShow, setEntity, setEdit, entity }) {
 
   const newEntitiesArray = []
   
@@ -36,6 +36,8 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
   }
  
   sortByCustomDateStart(updatedEntitiesArray, todayDate.getMonth(), todayDate.getDate(), todayDate.getFullYear())
+
+  console.log('what are the entities here in entitiy table', entities)
 
   //Interates through the entities array and creates HTML for each entity
   for (let i = 0; i < entities.length; i++) {
@@ -192,7 +194,6 @@ function EntityTable({ handleShow, setEntity, setEdit, setEntityIndex, entity })
                   <li key={`edit-${_id}`} onClick={() => {
                     handleShow(); 
                     setEdit(true); 
-                    setEntityIndex(i); 
                     setEntity({...entity, name: name, state: state, dueDate: formattedDate, status: status, notes: notes});
                   }}>
                     Edit

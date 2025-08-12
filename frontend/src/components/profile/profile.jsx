@@ -27,7 +27,6 @@ function Profile() {
     notes: '',
   })
 
-  const [ entityIndex, setEntityIndex ] = useState()
   const [ show, setShow ] = useState(false)
   const [ edit, setEdit ] = useState(false)
   const [ showAlert, setShowAlert ] = useState(false)
@@ -101,7 +100,6 @@ function Profile() {
         handleShow={handleShow} 
         setEntity={setEntity} 
         setEdit={setEdit} 
-        setEntityIndex={setEntityIndex} 
         entity={entity} 
       />
     ) 
@@ -143,7 +141,7 @@ function Profile() {
 
     } else {
 
-      const updatedContent = await updateEntity(entity, entityIndex)
+      const updatedContent = await updateEntity(entity)
 
       if (!updatedContent.data) {
 

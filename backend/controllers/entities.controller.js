@@ -95,22 +95,10 @@ export const updateEntity = async (req, res) => {
   todayDate.setHours(0, 0, 0, 0)
   date.setHours(0, 0, 0, 0)
 
-  if (date.getMonth() > todayDate.getMonth() || (date.getMonth() === todayDate.getMonth() && date.getDate() > todayDate.getDate())) {
-
-    date.setFullYear(todayDate.getFullYear())
-    
-    const dateString = date.toLocaleString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric'
-    })
-
-    newInfo.entity.dueDate = dateString
-
-  } else if (date.getFullYear() < todayDate.getFullYear() && date.getMonth() < todayDate.getMonth() || (date.getMonth() === todayDate.getMonth() && date.getDate() < todayDate.getDate())) {
+  if (date.getFullYear() <= todayDate.getFullYear() && (date.getMonth() < todayDate.getMonth() || (date.getMonth() === todayDate.getMonth() && date.getDate() < todayDate.getDate()))) {
 
     date.setFullYear(todayDate.getFullYear() + 1)
-   
+    
     const dateString = date.toLocaleString('en-US', {
       month: 'long',
       day: 'numeric',
@@ -119,6 +107,16 @@ export const updateEntity = async (req, res) => {
 
     newInfo.entity.dueDate = dateString
     
+  } else {
+    
+    const dateString = date.toLocaleString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric'
+    })
+
+    newInfo.entity.dueDate = dateString
+
   }
 
   if (newInfo.entity.name === '' || newInfo.entity.state === 'Entity state' || newInfo.entity.dueDate === '' || newInfo.reminderFrequency === 'Set reminder' || newInfo.entity.status === 'Status') {
@@ -144,14 +142,14 @@ export const updateEntity = async (req, res) => {
 
   try {
     
-    updatedInfo = await User.findByIdAndUpdate(id, {
+    updatedInfo = await User.findOneAndUpdate({ _id: id, "entities._id": newInfo.entity._id }, {
       $set: {
-        [`entities.${newInfo.index}.name`]: newInfo.entity.name,
-        [`entities.${newInfo.index}.state`]: newInfo.entity.state,
-        [`entities.${newInfo.index}.dueDate`]: newInfo.entity.dueDate,
-        [`entities.${newInfo.index}.reminderFrequency`]: newInfo.entity.reminderFrequency,
-        [`entities.${newInfo.index}.status`]: newInfo.entity.status,
-        [`entities.${newInfo.index}.notes`]: newInfo.entity.notes
+        "entities.$.name": newInfo.entity.name,
+        "entities.$.state": newInfo.entity.state,
+        "entities.$.dueDate": newInfo.entity.dueDate,
+        "entities.$.reminderFrequency": newInfo.entity.reminderFrequency,
+        "entities.$.status": newInfo.entity.status,
+        "entities.$.notes": newInfo.entity.notes
       }
     }, { new: true })
     
