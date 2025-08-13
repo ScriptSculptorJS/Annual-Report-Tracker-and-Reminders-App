@@ -29,7 +29,7 @@ I am eager to apply for a tech and marketing company called Two Barrels LLC, and
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/annual-report-tracker.git
+   git clone https://github.com/ScriptSculptorJS/Annual-Report-Tracker-and-Reminders-App.git
 2. Install dependencies for both client and server:
     ```bash
     npm install
