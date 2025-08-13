@@ -33,7 +33,7 @@ I am eager to apply for a tech and marketing company called Two Barrels LLC, and
 2. Install dependencies for both client and server:
     ```bash
     npm install
-    cd client
+    cd frontend
     npm install
 
 3. Set up your .env file in the root directory with the following:
